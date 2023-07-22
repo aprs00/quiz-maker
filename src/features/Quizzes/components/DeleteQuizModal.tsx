@@ -19,7 +19,7 @@ const DeleteQuizModal = (props: DeleteQuizModalPropsType) => {
                     </Text>
                 </Text>
                 <Group mt="xl" position="center">
-                    <Button>Cancel</Button>
+                    <Button onClick={close}>Cancel</Button>
                     <Button color="red">Delete</Button>
                 </Group>
             </Modal>

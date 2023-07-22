@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
 import App from './App.tsx';
+import {initMocks} from './mocks/server';
+
+initMocks();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>

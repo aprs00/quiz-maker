@@ -7,7 +7,7 @@ import {useDisclosure} from '@mantine/hooks';
 import useStyles from './styles';
 // Config
 import {NAVIGATION_HEADER_HEIGHT} from '../../config/sizes';
-import {navigationLinks} from '../../config/links';
+import {navigationLinks} from '../../config/pageLinks';
 
 const HeaderResponsive = () => {
     const location = useLocation();
