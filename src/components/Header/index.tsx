@@ -15,7 +15,8 @@ const HeaderResponsive = () => {
 
     const {classes} = useStyles();
 
-    const currentPath = location.pathname.split('?')[0];
+    // const currentPath = location.pathname.split('?')[0];
+    const currentPath = `/${location.pathname.split('/')[1]}`;
 
     const items = navigationLinks.map((link) => (
         <Button
@@ -29,8 +30,8 @@ const HeaderResponsive = () => {
     ));
 
     return (
-        <Header height={NAVIGATION_HEADER_HEIGHT}>
-            <Container className={classes.header}>
+        <Header height={NAVIGATION_HEADER_HEIGHT} mb={100}>
+            <Container className={classes.container}>
                 <Group spacing={5} className={classes.links}>
                     {items}
                 </Group>

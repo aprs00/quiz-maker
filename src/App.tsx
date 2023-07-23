@@ -13,31 +13,31 @@ import NotFound from './features/NotFound/views/NotFound';
 function App() {
     return (
         <BrowserRouter>
-            <ErrorBoundary FallbackComponent={NotFound}>
-                <QueryClientProvider client={queryClient}>
-                    <ReactQueryDevtools
-                        initialIsOpen
-                        position="bottom-left"
-                        toggleButtonProps={{
-                            style: {
-                                marginLeft: '5.5rem',
-                                transform: `scale(.7)`,
-                                transformOrigin: 'bottom left',
-                            },
-                        }}
-                    />
-                    <MantineProvider
-                        withGlobalStyles
-                        withNormalizeCSS
-                        theme={{
-                            colorScheme: 'dark',
-                        }}
-                    >
-                        <Notifications position="top-center" />
-                        <AppRoutes />
-                    </MantineProvider>
-                </QueryClientProvider>
-            </ErrorBoundary>
+            {/* <ErrorBoundary FallbackComponent={NotFound}> */}
+            <QueryClientProvider client={queryClient}>
+                <ReactQueryDevtools
+                    initialIsOpen
+                    position="bottom-left"
+                    toggleButtonProps={{
+                        style: {
+                            marginLeft: '5.5rem',
+                            transform: `scale(.7)`,
+                            transformOrigin: 'bottom left',
+                        },
+                    }}
+                />
+                <MantineProvider
+                    withGlobalStyles
+                    withNormalizeCSS
+                    theme={{
+                        colorScheme: 'dark',
+                    }}
+                >
+                    <Notifications position="top-center" />
+                    <AppRoutes />
+                </MantineProvider>
+            </QueryClientProvider>
+            {/* </ErrorBoundary> */}
         </BrowserRouter>
     );
 }

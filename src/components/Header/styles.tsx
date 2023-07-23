@@ -1,7 +1,7 @@
 import {createStyles, rem} from '@mantine/core';
 
-// Config
-import {NAVIGATION_HEADER_HEIGHT} from '../../config/constants';
+// Constants
+const NAVIGATION_HEADER_HEIGHT = rem(60);
 
 const useStyles = createStyles((theme) => ({
     dropdown: {
@@ -20,11 +20,15 @@ const useStyles = createStyles((theme) => ({
         },
     },
 
-    header: {
+    container: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         height: '100%',
+    },
+
+    header: {
+        height: NAVIGATION_HEADER_HEIGHT,
     },
 
     links: {

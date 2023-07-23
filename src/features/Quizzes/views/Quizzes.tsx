@@ -1,4 +1,5 @@
-import {useState, useCallback} from 'react';
+import {useState} from 'react';
+import {Link} from 'react-router-dom';
 import {Table, Button, Flex} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
 import {IconPlayerPlay, IconTrash, IconPencil} from '@tabler/icons-react';
@@ -10,18 +11,15 @@ import QuizzesSkeletonLoader from '../components/QuizzesSkeletonLoader';
 import {useQuizzes} from '../api';
 
 const Quizzes = () => {
-    const [quizToDeleteId, setQuizToDeleteId] = useState<any>();
+    const [quizToDeleteId, setQuizToDeleteId] = useState<number | null>(null);
     const [opened, {open, close}] = useDisclosure(false);
 
-    const {data: quizzes, isLoading, error, refetch} = useQuizzes();
+    const {data: quizzes, isLoading, error} = useQuizzes();
 
-    const handleQuizDelete = useCallback(
-        (id: number) => {
-            open();
-            setQuizToDeleteId(id);
-        },
-        [open, quizToDeleteId],
-    );
+    const handleQuizDeleteBtn = (id: number) => {
+        open();
+        setQuizToDeleteId(id);
+    };
 
     const tHead = (
         <tr>
@@ -38,10 +36,14 @@ const Quizzes = () => {
                     <Button color="green" onClick={() => console.log('edit')} leftIcon={<IconPlayerPlay size="1rem" />}>
                         Play
                     </Button>
-                    <Button onClick={() => console.log('edit')} leftIcon={<IconPencil size="1rem" />}>
+                    <Button component={Link} to={`/quizzes/${row.id}`} leftIcon={<IconPencil size="1rem" />}>
                         Edit
                     </Button>
-                    <Button color="red" onClick={() => handleQuizDelete(row.id)} leftIcon={<IconTrash size="1rem" />}>
+                    <Button
+                        color="red"
+                        onClick={() => handleQuizDeleteBtn(row.id)}
+                        leftIcon={<IconTrash size="1rem" />}
+                    >
                         Delete
                     </Button>
                 </Flex>
@@ -55,13 +57,6 @@ const Quizzes = () => {
 
     return (
         <>
-            <Button
-                onClick={() => {
-                    refetch();
-                }}
-            >
-                fetch
-            </Button>
             <DeleteQuizModal opened={opened} quizToDeleteId={quizToDeleteId} close={close} />
             <Table>
                 <thead>{tHead}</thead>

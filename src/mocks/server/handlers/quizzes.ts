@@ -15,6 +15,22 @@ export const quizzesHandlers = [
         }
     }),
 
+    rest.get(`${API_URL}/quizzes/:quizId`, (req, _, ctx) => {
+        try {
+            const {quizId} = req.params;
+            const result = db.quiz.findFirst({
+                where: {
+                    id: {
+                        equals: Number(quizId),
+                    },
+                },
+            });
+            return delayedResponse(ctx.json(result));
+        } catch (error: any) {
+            return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));
+        }
+    }),
+
     rest.post(`${API_URL}/quizzes`, (req, _, ctx) => {
         try {
             const data = req.json();
@@ -39,7 +55,6 @@ export const quizzesHandlers = [
                     },
                 },
             });
-            // console.log(db.quiz.getAll());
             persistDb('quiz');
             return delayedResponse(ctx.json(result));
         } catch (error: any) {

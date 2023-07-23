@@ -17,3 +17,7 @@ export type QuestionType = {
 };
 
 export type QuizzesResponseType = QuizType[] & {};
+
+export type QuizResponseType = QuizType & {};
+
+export type QuestionsResponseType = QuestionType[] & {};

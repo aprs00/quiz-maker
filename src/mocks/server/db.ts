@@ -49,30 +49,24 @@ const populateDb = () => {
 };
 
 const initializeDb = () => {
-    const database = loadDb();
+    const localStorageDb = loadDb();
+    const isMockDataEmpty = Object.keys(localStorageDb).length !== Object.keys(db).length;
 
-    // if database is empty, populate it, if not, populate it from local storage data
-    if (Object.keys(database).length !== Object.keys(db).length) {
+    if (isMockDataEmpty) {
         populateDb();
         persistDb('quiz');
         persistDb('question');
     } else {
-        Object.keys(db).forEach((model) => {
-            if (model === 'question') {
-                // Populate the questions with data from local storage
-                database[model].forEach((data: QuestionType) => db[model].create(data));
-            } else if (model === 'quiz') {
-                const questions = db.question.getAll();
-                // Populate the quizzes with data from local storage
-                database[model].forEach((data: QuizType) => {
-                    // Retrieve the question IDs from local storage data
-                    const questionIds = data.questions.map((question) => question.id);
-                    // Retrieve the actual question objects from the generated data
-                    const quizQuestions = questions.filter((question) => questionIds.includes(question.id));
-                    // Create the quiz with the corresponding questions
-                    db.quiz.create({...data, questions: quizQuestions});
-                });
-            }
+        localStorageDb.question.forEach((data: QuestionType) => db.question.create(data));
+        const questions = db.question.getAll();
+
+        localStorageDb.quiz.forEach((data: QuizType) => {
+            // Retrieve the question IDs from local storage data
+            const questionIds = data.questions.map((question) => question.id);
+            // Retrieve the actual question objects from the generated data
+            const quizQuestions = questions.filter((question) => questionIds.includes(question.id));
+            // Create the quiz with the corresponding questions
+            db.quiz.create({...data, questions: quizQuestions});
         });
     }
 };
