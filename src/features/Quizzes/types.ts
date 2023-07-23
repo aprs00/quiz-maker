@@ -1,6 +1,6 @@
 export type DeleteQuizModalPropsType = {
     opened: boolean;
-    quizToDelete: QuizType;
+    quizToDeleteId: number | null;
     close: () => void;
 };
 
@@ -15,3 +15,5 @@ export type QuestionType = {
     question: string;
     answer: string;
 };
+
+export type QuizzesResponseType = QuizType[] & {};

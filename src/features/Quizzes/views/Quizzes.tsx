@@ -1,68 +1,47 @@
-import {useState, useCallback, useEffect} from 'react';
-import {Table, Button, ActionIcon, Flex} from '@mantine/core';
+import {useState, useCallback} from 'react';
+import {Table, Button, Flex} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
-import {IconPlayerPlay} from '@tabler/icons-react';
+import {IconPlayerPlay, IconTrash, IconPencil} from '@tabler/icons-react';
 
 // Components
 import DeleteQuizModal from '../components/DeleteQuizModal';
-// Config
-import {API_URL} from '../../../config/env';
-
-const elements = [
-    {
-        id: 1,
-        name: 'Enterwell Quiz',
-        questions: [
-            {
-                id: 1,
-                question:
-                    "Who was the English mathematician and writer widely considered as the worldq's first computer programmer for her work on Charles Babbage's proposed mechanical general-purpose computer, the Analytical Engine?",
-                answer: 'Ada Lovelace',
-            },
-        ],
-    },
-];
+import QuizzesSkeletonLoader from '../components/QuizzesSkeletonLoader';
+// Api
+import {useQuizzes} from '../api';
 
 const Quizzes = () => {
-    const [quizToDelete, setQuizToDelete] = useState<any>();
+    const [quizToDeleteId, setQuizToDeleteId] = useState<any>();
     const [opened, {open, close}] = useDisclosure(false);
-    const [quizzes, setQuizzes] = useState<any[]>([]);
+
+    const {data: quizzes, isLoading, error, refetch} = useQuizzes();
 
     const handleQuizDelete = useCallback(
         (id: number) => {
             open();
-            const quizToDelete = quizzes.find((question) => question.id === id);
-            setQuizToDelete(quizToDelete);
+            setQuizToDeleteId(id);
         },
-        [open, quizToDelete],
+        [open, quizToDeleteId],
     );
-
-    const fetchQuizzes = async () => {
-        const response = await fetch(`${API_URL}/quizzes`);
-        const quizzesJson = await response.json();
-        setQuizzes(quizzesJson);
-    };
 
     const tHead = (
         <tr>
-            <th></th>
             <th>Name</th>
             <th>Action</th>
         </tr>
     );
 
-    const tRows = quizzes.map((row) => (
+    const tRows = quizzes?.map((row) => (
         <tr key={row.id}>
-            <td width={30}>
-                <ActionIcon size="xl">
-                    <IconPlayerPlay color="green" />
-                </ActionIcon>
-            </td>
             <td>{row.name}</td>
             <td width={150}>
                 <Flex direction={{base: 'column', sm: 'row'}} gap="xs">
-                    <Button onClick={fetchQuizzes}>Edit</Button>
-                    <Button color="red" onClick={() => handleQuizDelete(row.id)}>
+                    <Button color="green" onClick={() => console.log('edit')} leftIcon={<IconPlayerPlay size="1rem" />}>
+                        Play
+                    </Button>
+                    <Button onClick={() => console.log('edit')} leftIcon={<IconPencil size="1rem" />}>
+                        Edit
+                    </Button>
+                    <Button color="red" onClick={() => handleQuizDelete(row.id)} leftIcon={<IconTrash size="1rem" />}>
                         Delete
                     </Button>
                 </Flex>
@@ -70,21 +49,20 @@ const Quizzes = () => {
         </tr>
     ));
 
-    useEffect(() => {
-        async function logMovies() {
-            const response = await fetch('/quizzes');
-            const movies = await response.json();
-            console.log(movies);
-            console.log('f0ew');
-        }
-
-        logMovies();
-    }, []);
+    if (isLoading) {
+        return <QuizzesSkeletonLoader />;
+    }
 
     return (
         <>
-            <Button onClick={fetchQuizzes}>fetch</Button>
-            <DeleteQuizModal opened={opened} quizToDelete={quizToDelete} close={close} />
+            <Button
+                onClick={() => {
+                    refetch();
+                }}
+            >
+                fetch
+            </Button>
+            <DeleteQuizModal opened={opened} quizToDeleteId={quizToDeleteId} close={close} />
             <Table>
                 <thead>{tHead}</thead>
                 <tbody>{tRows}</tbody>

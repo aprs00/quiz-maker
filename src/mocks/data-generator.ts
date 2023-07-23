@@ -1,18 +1,14 @@
 import {faker} from '@faker-js/faker';
 
-// Utils
-import {randomNumber} from '../utils';
-
 const quizGenerator = () => ({
-    id: faker.string.uuid(),
+    id: faker.number.int(),
     name: faker.lorem.sentence(),
-    // questions: [...new Array(randomNumber(15, 25))].map(() => questionGenerator()),
 });
 
 const questionGenerator = () => ({
-    id: faker.string.uuid(),
-    question: faker.lorem.words(),
-    answer: faker.lorem.words(),
+    id: faker.number.int(),
+    question: faker.lorem.paragraph({min: 2, max: 5}),
+    answer: faker.music.songName(),
 });
 
 export {quizGenerator, questionGenerator};

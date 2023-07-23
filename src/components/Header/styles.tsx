@@ -1,7 +1,7 @@
 import {createStyles, rem} from '@mantine/core';
 
 // Config
-import {NAVIGATION_HEADER_HEIGHT} from '../../config/sizes';
+import {NAVIGATION_HEADER_HEIGHT} from '../../config/constants';
 
 const useStyles = createStyles((theme) => ({
     dropdown: {

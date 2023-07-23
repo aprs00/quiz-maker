@@ -1,5 +1,7 @@
+import {USE_MOCK_API} from '../../config/env';
+
 const initMocks = async () => {
-    if (import.meta.env.DEV) {
+    if (USE_MOCK_API) {
         if (typeof window === 'undefined') {
             const {server} = await import('./server');
             server.listen();
