@@ -2,7 +2,7 @@ import {factory, primaryKey, manyOf} from '@mswjs/data';
 import {quizGenerator, questionGenerator} from '../data-generator';
 import {randomNumber} from '../../utils';
 
-import {QuestionType} from '../../features/Quizzes/types';
+import {QuestionType, QuizType} from '../../features/Quizzes/types';
 
 const NUMBER_OF_QUESTIONS = 100;
 const NUMBER_OF_QUIZZES = 10;
@@ -30,21 +30,6 @@ const persistDb = (model: keyof typeof db) => {
     data[model] = db[model].getAll();
     window.localStorage.setItem('msw-db', JSON.stringify(data));
 };
-
-// const populateDb = () => {
-//     // Generating new question data and adding them to the database
-//     [...new Array(NUMBER_OF_QUESTIONS)].forEach(() => {
-//         const questionData = questionGenerator();
-//         db.question.create(questionData);
-//     });
-//     // Generating new quiz data and adding them to the database and randomly assigning questions to them
-//     [...new Array(NUMBER_OF_QUIZZES)].forEach(() => {
-//         const quizData = quizGenerator();
-//         const questions = db.question.getAll();
-//         const randomQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, randomNumber(15, 25));
-//         db.quiz.create({...quizData, questions: randomQuestions});
-//     });
-// };
 
 const populateDb = () => {
     // Generating new question data and adding them to the database
@@ -75,11 +60,11 @@ const initializeDb = () => {
         Object.keys(db).forEach((model) => {
             if (model === 'question') {
                 // Populate the questions with data from local storage
-                database[model].forEach((data) => db[model].create(data));
+                database[model].forEach((data: QuestionType) => db[model].create(data));
             } else if (model === 'quiz') {
                 const questions = db.question.getAll();
                 // Populate the quizzes with data from local storage
-                database[model].forEach((data) => {
+                database[model].forEach((data: QuizType) => {
                     // Retrieve the question IDs from local storage data
                     const questionIds = data.questions.map((question) => question.id);
                     // Retrieve the actual question objects from the generated data

@@ -6,7 +6,7 @@ import {delayedResponse} from '../utils';
 import {API_URL} from '../../../config/env';
 
 export const quizzesHandlers = [
-    rest.get(`${API_URL}/quizzes`, (req, res, ctx) => {
+    rest.get(`${API_URL}/quizzes`, (_, __, ctx) => {
         try {
             const result = db.quiz.findMany({});
             return delayedResponse(ctx.json(result));
@@ -15,7 +15,7 @@ export const quizzesHandlers = [
         }
     }),
 
-    rest.post(`${API_URL}/quizzes`, (req, res, ctx) => {
+    rest.post(`${API_URL}/quizzes`, (req, _, ctx) => {
         try {
             const data = req.json();
             const result = db.quiz.create({
@@ -29,7 +29,7 @@ export const quizzesHandlers = [
         }
     }),
 
-    rest.delete(`${API_URL}/quizzes/:quizId`, async (req, res, ctx) => {
+    rest.delete(`${API_URL}/quizzes/:quizId`, async (req, _, ctx) => {
         try {
             const {quizId} = req.params;
             const result = db.quiz.delete({
