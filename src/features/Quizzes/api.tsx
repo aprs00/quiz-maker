@@ -28,13 +28,13 @@ const fetchQuizzes = async (): Promise<QuizzesResponseType> => {
 };
 
 const fetchQuiz = async (id: number): Promise<QuizResponseType> => {
-    // const data = (await api.get(`quizzes/${id}`).json()) as QuizResponseType;
-    // return data;
-
-    // use fetch instead of ky
-    const response = await fetch(`${API_URL}/quizzes/${id}`);
-    const data = await response.json();
+    const data = (await api.get(`quizzes/${id}`).json()) as QuizResponseType;
     return data;
+
+    // using fetch
+    // const response = await fetch(`${API_URL}/quizzes/${id}`);
+    // const data = await response.json();
+    // return data;
 };
 
 const updateQuiz = async (id: number, json: any): Promise<void> => {
@@ -45,7 +45,7 @@ const deleteQuiz = async (id: number): Promise<void> => {
     await api.delete(`quizzes/${id}`);
 };
 
-const useQuizzes = (quizEditForm) => {
+const useQuizzes = () => {
     return useQuery({
         queryKey: ['quizzes'],
         queryFn: () => fetchQuizzes(),
