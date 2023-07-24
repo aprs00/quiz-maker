@@ -7,7 +7,7 @@ import QuizEditSkeletonLoader from '../components/QuizEditSkeletonLoader';
 // Api
 import {useQuiz, useUpdateQuiz, useQuestions} from '../api';
 // Types
-import {QuizEditFormType, QuestionAddFormType} from '../types';
+import {QuizEditFormType, QuestionAddFormType, QuestionType} from '../types';
 // Hooks
 import {useCustomRouter} from '@/hooks';
 import useStyles from '../styles';
@@ -18,7 +18,16 @@ const QuizEdit = () => {
     const {goBack, id} = useCustomRouter();
     const {classes} = useStyles();
 
-    const {data: quiz, isLoading, error} = useQuiz(Number(id));
+    // since quiz from list and single quiz get have same values and properties,
+    // we can just pass quiz value through state using react router. (1)
+    // if that is not suitable, we can still fetch quiz using useQuiz (2)
+
+    // 1
+    const [isLoading] = useState(false);
+    const {state: quiz} = useCustomRouter();
+    // 2
+    // const {data: quiz, isLoading, error} = useQuiz(Number(id));
+
     const {data: questions} = useQuestions();
     const {mutate: updateQuiz} = useUpdateQuiz(Number(id) || 0);
 
@@ -28,6 +37,13 @@ const QuizEdit = () => {
             questions: [],
         },
     });
+
+    useEffect(() => {
+        quizEditForm.setValues({
+            name: quiz?.name,
+            questions: quiz?.questions.map((question: QuestionType) => question.id.toString()),
+        });
+    }, [quiz, quizEditForm.setValues]);
 
     const addNewQuestionForm = useForm<QuestionAddFormType>({
         initialValues: {
@@ -86,16 +102,16 @@ const QuizEdit = () => {
         [updateQuiz, questions],
     );
 
-    useEffect(() => {
-        if (!isLoading && quiz) {
-            quizEditForm.setValues({
-                name: quiz?.name,
-                questions: quiz?.questions.map((question) => question.id.toString()),
-            });
+    // useEffect(() => {
+    //     if (!isLoading && quiz) {
+    //         quizEditForm.setValues({
+    //             name: quiz?.name,
+    //             questions: quiz?.questions.map((question) => question.id.toString()),
+    //         });
 
-            console.log(quizEditForm.values);
-        }
-    }, [isLoading, quiz]);
+    //         console.log(quizEditForm.values);
+    //     }
+    // }, [isLoading, quiz]);
 
     if (isLoading) {
         return <QuizEditSkeletonLoader />;

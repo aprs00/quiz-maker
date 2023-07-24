@@ -36,7 +36,12 @@ const Quizzes = () => {
                     <Button color="green" onClick={() => console.log('edit')} leftIcon={<IconPlayerPlay size="1rem" />}>
                         Play
                     </Button>
-                    <Button component={Link} to={`/quizzes/${row.id}`} leftIcon={<IconPencil size="1rem" />}>
+                    <Button
+                        component={Link}
+                        to={`/quizzes/${row.id}`}
+                        state={row}
+                        leftIcon={<IconPencil size="1rem" />}
+                    >
                         Edit
                     </Button>
                     <Button
