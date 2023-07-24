@@ -1,16 +1,22 @@
-import {Skeleton} from '@mantine/core';
-
-// Constants
-const SKELETON_TABLE_ROWS = 2;
+import {Flex, Divider, Skeleton, Group} from '@mantine/core';
 
 const QuizEditSkeletonLoader = () => {
     return (
-        <>
-            <Skeleton height={40} width={220} radius="sm" mb="xl" />
-            {[...Array(SKELETON_TABLE_ROWS)].map((_, index) => (
-                <Skeleton key={index} height={40} radius="sm" mb="sm" />
-            ))}
-        </>
+        <Flex gap="lg" direction="column">
+            <Skeleton height={40} width={320} radius="sm" />
+            <Skeleton height={400} radius="sm" />
+
+            <Divider />
+            <Skeleton height={40} width={260} radius="sm" />
+            <Skeleton height={40} radius="sm" />
+            <Skeleton height={40} radius="sm" />
+            <Divider />
+
+            <Group position="right">
+                <Skeleton height={40} width={100} radius="sm" />
+                <Skeleton height={40} width={100} radius="sm" />
+            </Group>
+        </Flex>
     );
 };
 

@@ -1,13 +1,10 @@
-// import { createStyles } from "@mantine/core";
+import {createStyles} from '@mantine/core';
 
-// const useStyles = createStyles((theme) => ({
-//     tableActionContainer: {
-//         gap: '10px',
-//         display: 'flex',
-//         // on mobile devices, display the buttons vertically
-//         flexDirection: 'row',
-//         [theme.breakpoints('sm')]: {
-//             flexDirection: 'column',
-//         },
-//     }
-// }));
+const useStyles = createStyles((theme) => ({
+    value: {
+        fontSize: theme.fontSizes.sm,
+        height: 'auto',
+    },
+}));
+
+export default useStyles;

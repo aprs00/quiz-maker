@@ -21,3 +21,14 @@ export type QuizzesResponseType = QuizType[] & {};
 export type QuizResponseType = QuizType & {};
 
 export type QuestionsResponseType = QuestionType[] & {};
+
+export type QuizEditFormType = {
+    name: string;
+    questions: string[];
+};
+
+export type QuestionAddFormType = {
+    answer: string;
+    question: string;
+    id: number | null;
+};

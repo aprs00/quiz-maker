@@ -15,7 +15,7 @@ export const quizzesHandlers = [
         }
     }),
 
-    rest.get(`${API_URL}/quizzes/:quizId`, (req, _, ctx) => {
+    rest.get(`${API_URL}/quizzes/:quizId`, (req, res, ctx) => {
         try {
             const {quizId} = req.params;
             const result = db.quiz.findFirst({
@@ -41,6 +41,29 @@ export const quizzesHandlers = [
             persistDb('quiz');
             return delayedResponse(ctx.json(result));
         } catch (error: any) {
+            return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));
+        }
+    }),
+
+    rest.put(`${API_URL}/quizzes/:quizId`, async (req, _, ctx) => {
+        try {
+            const {quizId} = req.params;
+            const data = await req.json();
+            console.log('data', data);
+            const result = db.quiz.update({
+                where: {
+                    id: {
+                        equals: Number(quizId),
+                    },
+                },
+                data,
+            });
+            console.log('result', result);
+            // persistDb('quiz');
+            console.log(data);
+            return delayedResponse(ctx.json(result));
+        } catch (error: any) {
+            console.log(error);
             return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));
         }
     }),
