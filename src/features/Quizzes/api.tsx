@@ -1,8 +1,8 @@
 import ky from 'ky';
 import {useQuery, useMutation} from '@tanstack/react-query';
 
-import {API_URL} from '../../config/env';
-import {queryClient} from '../../lib/react-query';
+import {API_URL} from '@/config/env';
+import {queryClient} from '@/lib/react-query';
 
 import type {QuizzesResponseType, QuizResponseType, QuestionsResponseType} from './types';
 

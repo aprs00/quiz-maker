@@ -2,7 +2,7 @@ import {rest} from 'msw';
 
 import {db} from '../db';
 import {delayedResponse} from '../utils';
-import {API_URL} from '../../../config/env';
+import {API_URL} from '@/config/env';
 
 export const questionsHandlers = [
     rest.get(`${API_URL}/questions`, (_, __, ctx) => {

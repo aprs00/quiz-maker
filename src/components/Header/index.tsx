@@ -6,8 +6,8 @@ import {useDisclosure} from '@mantine/hooks';
 // Styles
 import useStyles from './styles';
 // Config
-import {NAVIGATION_HEADER_HEIGHT} from '../../config/constants';
-import {navigationLinks} from '../../config/pageLinks';
+import {NAVIGATION_HEADER_HEIGHT} from '@/config/constants';
+import {navigationLinks} from '@/config/pageLinks';
 
 const HeaderResponsive = () => {
     const location = useLocation();
@@ -15,8 +15,7 @@ const HeaderResponsive = () => {
 
     const {classes} = useStyles();
 
-    // const currentPath = location.pathname.split('?')[0];
-    const currentPath = `/${location.pathname.split('/')[1]}`;
+    const currentPath = location.pathname.split('?')[0];
 
     const items = navigationLinks.map((link) => (
         <Button

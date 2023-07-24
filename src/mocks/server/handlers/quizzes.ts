@@ -3,7 +3,7 @@ import {faker} from '@faker-js/faker';
 
 import {db, persistDb} from '../db';
 import {delayedResponse} from '../utils';
-import {API_URL} from '../../../config/env';
+import {API_URL} from '@/config/env';
 
 export const quizzesHandlers = [
     rest.get(`${API_URL}/quizzes`, (_, __, ctx) => {

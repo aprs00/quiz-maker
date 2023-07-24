@@ -1,9 +1,9 @@
 import type {RouteObject} from 'react-router-dom';
 
 // Components
-import MainLayout from '../components/MainLayout';
+import MainLayout from '@/components/MainLayout';
 // Routes
-import QuizzesRoutes from '../features/Quizzes/routes';
+import QuizzesRoutes from '@/features/Quizzes/routes';
 
 export default [
     {

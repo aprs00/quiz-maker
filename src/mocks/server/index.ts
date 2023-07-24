@@ -1,4 +1,4 @@
-import {USE_MOCK_API} from '../../config/env';
+import {USE_MOCK_API} from '@/config/env';
 
 const initMocks = async () => {
     if (USE_MOCK_API) {

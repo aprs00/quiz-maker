@@ -9,8 +9,6 @@ import {useDeleteQuiz} from '../api';
 const DeleteQuizModal = (props: DeleteQuizModalPropsType) => {
     const {opened, quizToDeleteId, close} = props;
 
-    console.log(quizToDeleteId);
-
     const {mutate: deleteQuiz} = useDeleteQuiz(quizToDeleteId || 0);
 
     return (

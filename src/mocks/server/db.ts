@@ -1,8 +1,8 @@
 import {factory, primaryKey, manyOf} from '@mswjs/data';
 import {quizGenerator, questionGenerator} from '../data-generator';
-import {randomNumber} from '../../utils';
+import {randomNumber} from '@/utils';
 
-import {QuestionType, QuizType} from '../../features/Quizzes/types';
+import {QuestionType, QuizType} from '@/features/Quizzes/types';
 
 const NUMBER_OF_QUESTIONS = 100;
 const NUMBER_OF_QUIZZES = 10;
