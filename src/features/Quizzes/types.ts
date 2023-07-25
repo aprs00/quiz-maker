@@ -38,8 +38,19 @@ export type QuizEditFormType = {
     questions: string[];
 };
 
+export type QuizCreateFormType = {
+    name: string;
+    questions: string[];
+};
+
 export type QuestionAddFormType = {
     answer: string;
     question: string;
     id: number | null;
+    newQuestion: boolean;
+};
+
+export type NewQuizType = {
+    name: string;
+    questions: (QuestionType | QuestionAddFormType | {question: string; answer: string} | undefined)[];
 };

@@ -22,7 +22,7 @@ const models = {
 
 const db = factory(models);
 
-const loadDb = () => Object.assign(JSON.parse(window.localStorage.getItem('msw-db') || '{}'));
+const loadDb = () => Object.assign(JSON.parse(window.localStorage.getItem('quiz-maker-msw-db') || '{}'));
 
 const persistDb = (model: keyof typeof db) => {
     const data = loadDb();
@@ -44,6 +44,7 @@ const populateDb = () => {
     [...new Array(NUMBER_OF_QUIZZES)].forEach(() => {
         const quizData = quizGenerator();
         const randomQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, randomNumber(15, 25));
+
         db.quiz.create({...quizData, questions: randomQuestions});
     });
 };

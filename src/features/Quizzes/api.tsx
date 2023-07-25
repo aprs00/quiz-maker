@@ -4,7 +4,7 @@ import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient} from '@/lib/react-query';
 import {api} from '@/lib/ky';
 // TYPES
-import type {QuizzesResponseType, QuizResponseType, QuestionsResponseType} from './types';
+import type {QuizzesResponseType, QuizResponseType, QuestionsResponseType, NewQuizType} from './types';
 
 import {API_URL} from '@/config/env';
 
@@ -37,6 +37,10 @@ const fetchQuiz = async (id: number): Promise<QuizResponseType> => {
     // return data;
 };
 
+const createQuiz = async (json: any): Promise<void> => {
+    await api.post('quizzes', {json});
+};
+
 const updateQuiz = async (id: number, json: any): Promise<void> => {
     await api.put(`quizzes/${id}`, {json});
 };
@@ -56,6 +60,20 @@ const useQuiz = (id: number) => {
     return useQuery({
         queryKey: ['quiz', id],
         queryFn: () => fetchQuiz(id),
+    });
+};
+
+const useCreateQuiz = () => {
+    return useMutation({
+        mutationKey: ['createQuiz'],
+        mutationFn: (json: NewQuizType) => createQuiz(json),
+        onSuccess: () => {
+            console.log('useCreateQuiz');
+            queryClient.invalidateQueries(['quizzes']);
+        },
+        onError: (error) => {
+            console.log('useCreateQuiz error', error);
+        },
     });
 };
 
@@ -87,4 +105,4 @@ const useDeleteQuiz = (id: number) => {
     });
 };
 
-export {useQuizzes, useQuiz, useUpdateQuiz, useDeleteQuiz, useQuestions};
+export {useQuizzes, useQuiz, useCreateQuiz, useUpdateQuiz, useDeleteQuiz, useQuestions};

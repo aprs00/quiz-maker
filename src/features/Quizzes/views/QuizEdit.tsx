@@ -23,10 +23,10 @@ const QuizEdit = () => {
     // if that is not suitable, we can still fetch quiz using useQuiz (2)
 
     // 1
-    const [isLoading] = useState(false);
-    const {state: quiz} = useCustomRouter();
+    // const [isLoading] = useState(false);
+    // const {state: quiz} = useCustomRouter();
     // 2
-    // const {data: quiz, isLoading, error} = useQuiz(Number(id));
+    const {data: quiz, isLoading, error} = useQuiz(Number(id));
 
     const {data: questions} = useQuestions();
     const {mutate: updateQuiz} = useUpdateQuiz(Number(id) || 0);
@@ -134,7 +134,10 @@ const QuizEdit = () => {
                     label="Quiz Questions"
                     placeholder="Select Questions"
                     searchable
-                    classNames={{value: classes.value}}
+                    classNames={{
+                        value: classes.value,
+                        defaultValueLabel: classes.defaultValueLabel,
+                    }}
                     {...quizEditForm.getInputProps('questions')}
                 />
 

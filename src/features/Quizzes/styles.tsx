@@ -4,6 +4,10 @@ const useStyles = createStyles((theme) => ({
     value: {
         fontSize: theme.fontSizes.sm,
         height: 'auto',
+        paddingInline: theme.spacing.sm,
+    },
+    defaultValueLabel: {
+        whiteSpace: 'break-spaces',
     },
 
     // CAROUSEL

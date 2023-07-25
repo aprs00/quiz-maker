@@ -31,16 +31,33 @@ export const quizzesHandlers = [
         }
     }),
 
-    rest.post(`${API_URL}/quizzes`, (req, _, ctx) => {
+    rest.post(`${API_URL}/quizzes`, async (req, _, ctx) => {
         try {
-            const data = req.json();
+            const data = await req.json();
+
+            const questions = data.questions.map((question: any) => {
+                if (question.id) return question;
+
+                return db.question.create({
+                    question: question.question,
+                    answer: question.answer,
+                    id: faker.number.int(),
+                });
+            });
+
+            console.log(questions);
+
             const result = db.quiz.create({
                 id: faker.number.int(),
-                ...data,
+                name: data.name,
+                questions: questions,
             });
-            persistDb('quiz');
+
             return delayedResponse(ctx.json(result));
         } catch (error: any) {
+            console.log(error);
+            // if there is an error, undo all changes
+            persistDb('quiz');
             return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));
         }
     }),

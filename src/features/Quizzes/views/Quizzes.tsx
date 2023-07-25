@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Link} from 'react-router-dom';
-import {Table, Button, Flex} from '@mantine/core';
+import {Table, Button, Flex, Group} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
 import {IconPlayerPlay, IconTrash, IconPencil} from '@tabler/icons-react';
 
@@ -82,6 +82,12 @@ const Quizzes = () => {
                 quizToDeleteId={quizToDeleteId}
                 close={deleteQuizModalClose}
             />
+
+            <Group position="right" mb="xl">
+                <Button component={Link} to="/quizzes/create">
+                    Create
+                </Button>
+            </Group>
             <Table>
                 <thead>{tHead}</thead>
                 <tbody>{tRows}</tbody>
