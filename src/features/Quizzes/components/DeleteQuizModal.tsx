@@ -1,4 +1,3 @@
-import {memo} from 'react';
 import {Modal, Group, Button, Text} from '@mantine/core';
 
 // Types
@@ -36,4 +35,4 @@ const DeleteQuizModal = (props: DeleteQuizModalPropsType) => {
     );
 };
 
-export default memo(DeleteQuizModal);
+export default DeleteQuizModal;

@@ -6,19 +6,29 @@ import {IconPlayerPlay, IconTrash, IconPencil} from '@tabler/icons-react';
 
 // Components
 import DeleteQuizModal from '../components/DeleteQuizModal';
+import QuizPlayModal from '../components/QuizPlayModal';
 import QuizzesSkeletonLoader from '../components/QuizzesSkeletonLoader';
 // Api
 import {useQuizzes} from '../api';
+// Types
+import type {QuizType} from '../types';
 
 const Quizzes = () => {
     const [quizToDeleteId, setQuizToDeleteId] = useState<number | null>(null);
-    const [opened, {open, close}] = useDisclosure(false);
+    const [quizToPlay, setQuizToPlay] = useState<QuizType | null>(null);
+    const [deleteQuizModalOpened, {open: deleteQuizModalOpen, close: deleteQuizModalClose}] = useDisclosure(false);
+    const [quizPlayModalOpened, {open: quizPlayModalOpen, close: quizPlayModalClose}] = useDisclosure(false);
 
     const {data: quizzes, isLoading, error} = useQuizzes();
 
     const handleQuizDeleteBtn = (id: number) => {
-        open();
+        deleteQuizModalOpen();
         setQuizToDeleteId(id);
+    };
+
+    const handleQuizPlayBtn = (quiz: QuizType) => {
+        quizPlayModalOpen();
+        setQuizToPlay(quiz);
     };
 
     const tHead = (
@@ -33,7 +43,11 @@ const Quizzes = () => {
             <td>{row.name}</td>
             <td width={150}>
                 <Flex direction={{base: 'column', sm: 'row'}} gap="xs">
-                    <Button color="green" onClick={() => console.log('edit')} leftIcon={<IconPlayerPlay size="1rem" />}>
+                    <Button
+                        color="green"
+                        onClick={() => handleQuizPlayBtn(row)}
+                        leftIcon={<IconPlayerPlay size="1rem" />}
+                    >
                         Play
                     </Button>
                     <Button
@@ -62,7 +76,12 @@ const Quizzes = () => {
 
     return (
         <>
-            <DeleteQuizModal opened={opened} quizToDeleteId={quizToDeleteId} close={close} />
+            <QuizPlayModal quiz={quizToPlay} close={quizPlayModalClose} opened={quizPlayModalOpened} />
+            <DeleteQuizModal
+                opened={deleteQuizModalOpened}
+                quizToDeleteId={quizToDeleteId}
+                close={deleteQuizModalClose}
+            />
             <Table>
                 <thead>{tHead}</thead>
                 <tbody>{tRows}</tbody>

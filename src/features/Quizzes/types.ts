@@ -1,7 +1,18 @@
 export type DeleteQuizModalPropsType = {
     opened: boolean;
-    quizToDeleteId: number | null;
     close: () => void;
+    quizToDeleteId: number | null;
+};
+
+export type CarouselSlidePropsType = {
+    question: QuestionType;
+    index: number;
+};
+
+export type QuizPlayModalType = {
+    opened: boolean;
+    close: () => void;
+    quiz: QuizType | null;
 };
 
 export type QuizType = {
