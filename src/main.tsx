@@ -2,11 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import App from './App.tsx';
-// import {initMocks} from './mocks/server';
 import {USE_MOCK_API} from './config/env.ts';
-import {worker} from './mocks/server/browser.ts';
-
-// initMocks();
+import {worker} from './mocks/browser.ts';
 
 if (USE_MOCK_API) worker.start();
 

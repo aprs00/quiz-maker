@@ -1,5 +1,5 @@
 import {factory, primaryKey, manyOf} from '@mswjs/data';
-import {quizGenerator, questionGenerator} from '../data-generator';
+import {quizGenerator, questionGenerator} from './data-generator';
 import {randomNumber} from '@/utils';
 
 import {QuestionType, QuizType} from '@/features/Quizzes/types';
