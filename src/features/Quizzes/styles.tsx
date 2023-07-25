@@ -18,6 +18,10 @@ const useStyles = createStyles((theme) => ({
     carouselContainer: {
         alignItems: 'center',
     },
+    carouselTextRoot: {
+        maxHeight: '300px',
+        overflow: 'auto',
+    },
 }));
 
 export default useStyles;
