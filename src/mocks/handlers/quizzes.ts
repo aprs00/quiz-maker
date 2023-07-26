@@ -7,7 +7,7 @@ import {API_URL} from '@/config/env';
 import type {MockPayloadQuestion} from '@/features/Quizzes/types';
 
 export const quizzesHandlers = [
-    rest.get(`http://quiz-maker.apidocs.enterwell.space/api/quizzes`, (_, __, ctx) => {
+    rest.get(`${API_URL}/quizzes`, (_, __, ctx) => {
         try {
             const result = db.quiz.getAll();
             return delayedResponse(ctx.json(result));
