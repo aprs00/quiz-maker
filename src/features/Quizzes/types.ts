@@ -50,7 +50,7 @@ export type QuestionAddFormType = {
     newQuestion: boolean;
 };
 
-export type NewQuizType = {
+export type CreateQuizType = {
     name: string;
     questions: (QuestionType | QuestionAddFormType | {question: string; answer: string} | undefined)[];
 };
@@ -58,4 +58,10 @@ export type NewQuizType = {
 export type UpdatedQuizType = {
     name: string;
     questions: (QuestionType | QuestionAddFormType | {question: string; answer: string} | undefined)[];
+};
+
+export type MockPayloadQuestion = {
+    id?: number;
+    question: string;
+    answer: string;
 };

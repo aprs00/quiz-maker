@@ -10,7 +10,7 @@ const useStyles = createStyles((theme) => ({
         whiteSpace: 'break-spaces',
     },
 
-    // CAROUSEL
+    // Carousel
     carouselViewport: {
         marginRight: `calc(${theme.spacing.xl} * 3)`,
         marginLeft: `calc(${theme.spacing.xl} * 3)`,

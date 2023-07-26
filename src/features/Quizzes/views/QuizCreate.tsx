@@ -5,7 +5,7 @@ import {useForm} from '@mantine/form';
 // Api
 import {useCreateQuiz, useQuestions} from '../api';
 // Types
-import {QuizCreateFormType, QuestionAddFormType, NewQuizType} from '../types';
+import {QuizCreateFormType, QuestionAddFormType, CreateQuizType} from '../types';
 // Hooks
 import {useCustomRouter} from '@/hooks';
 import useStyles from '../styles';
@@ -82,7 +82,7 @@ const QuizCreate = () => {
                 return question;
             });
 
-            const json: NewQuizType = {
+            const json: CreateQuizType = {
                 name: values.name,
                 questions: parsedQuestionsByIds,
             };

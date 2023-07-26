@@ -4,6 +4,7 @@ import {faker} from '@faker-js/faker';
 import {db, persistDb} from '../db';
 import {delayedResponse} from '../utils';
 import {API_URL} from '@/config/env';
+import type {MockPayloadQuestion} from '@/features/Quizzes/types';
 
 export const quizzesHandlers = [
     rest.get(`${API_URL}/quizzes`, (_, __, ctx) => {
@@ -35,7 +36,7 @@ export const quizzesHandlers = [
         try {
             const data = await req.json();
 
-            const questions = data.questions.map((question: any) => {
+            const questions = data.questions.map((question: MockPayloadQuestion) => {
                 if (!question) return;
                 if (question.id) {
                     db.question.findFirst({
@@ -74,7 +75,7 @@ export const quizzesHandlers = [
             const {id} = req.params;
             const data = await req.json();
 
-            const questions = data.questions.map((question: any) => {
+            const questions = data.questions.map((question: MockPayloadQuestion) => {
                 if (!question) return;
                 if (question.id) {
                     db.question.findFirst({

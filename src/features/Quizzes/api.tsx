@@ -1,10 +1,17 @@
 import {useQuery, useMutation} from '@tanstack/react-query';
+import {notifications} from '@mantine/notifications';
 
 // Libs
 import {queryClient} from '@/lib/react-query';
 import {api} from '@/lib/ky';
 // Types
-import type {QuizzesResponseType, QuizResponseType, QuestionsResponseType, NewQuizType, UpdatedQuizType} from './types';
+import type {
+    QuizzesResponseType,
+    QuizResponseType,
+    QuestionsResponseType,
+    CreateQuizType,
+    UpdatedQuizType,
+} from './types';
 // Hooks
 import {useCustomRouter} from '@/hooks';
 
@@ -32,11 +39,11 @@ const fetchQuiz = async (id: number): Promise<QuizResponseType> => {
     return data;
 };
 
-const createQuiz = async (json: any): Promise<void> => {
+const createQuiz = async (json: CreateQuizType): Promise<void> => {
     await api.post('quizzes', {json});
 };
 
-const updateQuiz = async (id: number, json: any): Promise<void> => {
+const updateQuiz = async (id: number, json: UpdatedQuizType): Promise<void> => {
     await api.put(`quizzes/${id}`, {json});
 };
 
@@ -62,10 +69,14 @@ const useCreateQuiz = () => {
     const {goBack} = useCustomRouter();
     return useMutation({
         mutationKey: ['createQuiz'],
-        mutationFn: (json: NewQuizType) => createQuiz(json),
+        mutationFn: (json: CreateQuizType) => createQuiz(json),
         onSuccess: () => {
             queryClient.invalidateQueries(['quizzes']);
             goBack();
+            notifications.show({
+                title: 'Success',
+                message: 'Quiz created successfully',
+            });
         },
         onError: (error) => {
             console.log('useCreateQuiz error', error);
@@ -82,6 +93,10 @@ const useUpdateQuiz = (id: number) => {
             queryClient.invalidateQueries(['quizzes']);
             queryClient.invalidateQueries(['quiz', id]);
             goBack();
+            notifications.show({
+                title: 'Success',
+                message: 'Quiz updated successfully',
+            });
         },
         onError: (error) => {
             console.log('useUpdateQuiz error', error);
@@ -94,8 +109,11 @@ const useDeleteQuiz = (id: number) => {
         mutationKey: ['deleteQuiz', id],
         mutationFn: () => deleteQuiz(id),
         onSuccess: () => {
-            console.log('useDeleteQuiz');
             queryClient.invalidateQueries(['quizzes']);
+            notifications.show({
+                title: 'Success',
+                message: 'Quiz deleted successfully',
+            });
         },
         onError: (error) => {
             console.log('useDeleteQuiz error', error);

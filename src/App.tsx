@@ -10,7 +10,6 @@ import AppRoutes from './routes';
 function App() {
     return (
         <BrowserRouter>
-            {/* <ErrorBoundary FallbackComponent={NotFound}> */}
             <QueryClientProvider client={queryClient}>
                 <ReactQueryDevtools
                     initialIsOpen
@@ -34,7 +33,6 @@ function App() {
                     <AppRoutes />
                 </MantineProvider>
             </QueryClientProvider>
-            {/* </ErrorBoundary> */}
         </BrowserRouter>
     );
 }
