@@ -118,7 +118,7 @@ const QuizCreate = () => {
     return (
         <>
             <form onSubmit={quizCreateForm.onSubmit((values) => handleCreateQuiz(values))}>
-                <Flex gap="lg" direction="column">
+                <Flex gap="lg" direction="column" mb="xl">
                     <Title>Create Quiz</Title>
                     <TextInput
                         aria-label="Quiz Name"
