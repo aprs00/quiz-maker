@@ -36,7 +36,16 @@ export const quizzesHandlers = [
             const data = await req.json();
 
             const questions = data.questions.map((question: any) => {
-                if (question.id) return question;
+                if (!question) return;
+                if (question.id) {
+                    db.question.findFirst({
+                        where: {
+                            id: {
+                                equals: question.id,
+                            },
+                        },
+                    });
+                }
 
                 return db.question.create({
                     question: question.question,
@@ -45,42 +54,64 @@ export const quizzesHandlers = [
                 });
             });
 
-            console.log(questions);
-
             const result = db.quiz.create({
                 id: faker.number.int(),
                 name: data.name,
                 questions: questions,
             });
 
+            persistDb('quiz');
+            persistDb('question');
+
             return delayedResponse(ctx.json(result));
         } catch (error: any) {
-            console.log(error);
-            // if there is an error, undo all changes
-            persistDb('quiz');
             return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));
         }
     }),
 
-    rest.put(`${API_URL}/quizzes/:quizId`, async (req, _, ctx) => {
+    rest.put(`${API_URL}/quizzes/:id`, async (req, _, ctx) => {
         try {
-            const {quizId} = req.params;
+            const {id} = req.params;
             const data = await req.json();
-            console.log('data', data);
+
+            const questions = data.questions.map((question: any) => {
+                if (!question) return;
+                if (question.id) {
+                    db.question.findFirst({
+                        where: {
+                            id: {
+                                equals: question.id,
+                            },
+                        },
+                    });
+                }
+
+                return db.question.create({
+                    question: question.question,
+                    answer: question.answer,
+                    id: faker.number.int(),
+                });
+            });
+
+            const updateData = {
+                name: data.name,
+                questions: questions,
+            };
+
             const result = db.quiz.update({
                 where: {
                     id: {
-                        equals: Number(quizId),
+                        equals: Number(id),
                     },
                 },
-                data,
+                data: updateData,
             });
-            console.log('result', result);
-            // persistDb('quiz');
-            console.log(data);
+
+            persistDb('quiz');
+            persistDb('question');
+
             return delayedResponse(ctx.json(result));
         } catch (error: any) {
-            console.log(error);
             return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));
         }
     }),

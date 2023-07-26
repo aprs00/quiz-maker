@@ -54,3 +54,8 @@ export type NewQuizType = {
     name: string;
     questions: (QuestionType | QuestionAddFormType | {question: string; answer: string} | undefined)[];
 };
+
+export type UpdatedQuizType = {
+    name: string;
+    questions: (QuestionType | QuestionAddFormType | {question: string; answer: string} | undefined)[];
+};

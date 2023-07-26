@@ -1,12 +1,12 @@
 import {useQuery, useMutation} from '@tanstack/react-query';
 
-// LIBS
+// Libs
 import {queryClient} from '@/lib/react-query';
 import {api} from '@/lib/ky';
-// TYPES
-import type {QuizzesResponseType, QuizResponseType, QuestionsResponseType, NewQuizType} from './types';
-
-import {API_URL} from '@/config/env';
+// Types
+import type {QuizzesResponseType, QuizResponseType, QuestionsResponseType, NewQuizType, UpdatedQuizType} from './types';
+// Hooks
+import {useCustomRouter} from '@/hooks';
 
 // QUESTIONS
 const fetchQuestions = async (): Promise<QuestionsResponseType> => {
@@ -30,11 +30,6 @@ const fetchQuizzes = async (): Promise<QuizzesResponseType> => {
 const fetchQuiz = async (id: number): Promise<QuizResponseType> => {
     const data = (await api.get(`quizzes/${id}`).json()) as QuizResponseType;
     return data;
-
-    // using fetch
-    // const response = await fetch(`${API_URL}/quizzes/${id}`);
-    // const data = await response.json();
-    // return data;
 };
 
 const createQuiz = async (json: any): Promise<void> => {
@@ -64,12 +59,13 @@ const useQuiz = (id: number) => {
 };
 
 const useCreateQuiz = () => {
+    const {goBack} = useCustomRouter();
     return useMutation({
         mutationKey: ['createQuiz'],
         mutationFn: (json: NewQuizType) => createQuiz(json),
         onSuccess: () => {
-            console.log('useCreateQuiz');
             queryClient.invalidateQueries(['quizzes']);
+            goBack();
         },
         onError: (error) => {
             console.log('useCreateQuiz error', error);
@@ -78,12 +74,14 @@ const useCreateQuiz = () => {
 };
 
 const useUpdateQuiz = (id: number) => {
+    const {goBack} = useCustomRouter();
     return useMutation({
         mutationKey: ['updateQuiz', id],
-        mutationFn: (json) => updateQuiz(id, json),
+        mutationFn: (json: UpdatedQuizType) => updateQuiz(id, json),
         onSuccess: () => {
-            console.log('useUpdateQuiz');
             queryClient.invalidateQueries(['quizzes']);
+            queryClient.invalidateQueries(['quiz', id]);
+            goBack();
         },
         onError: (error) => {
             console.log('useUpdateQuiz error', error);

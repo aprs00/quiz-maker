@@ -28,9 +28,9 @@ const QuizCreate = () => {
 
     const addNewQuestionForm = useForm<QuestionAddFormType>({
         initialValues: {
-            answer: 'fewfewfewfwe',
-            question: 'fwefewfwefewwefefwefw',
-            id: 7164083361021952,
+            answer: '',
+            question: '',
+            id: null,
             newQuestion: true,
         },
     });
@@ -87,10 +87,9 @@ const QuizCreate = () => {
                 questions: parsedQuestionsByIds,
             };
 
-            console.log(json);
             createQuiz(json);
         },
-        [createQuiz, questions, createdQuestions],
+        [createQuiz, questions, createdQuestions, parsedQuestions],
     );
 
     return (

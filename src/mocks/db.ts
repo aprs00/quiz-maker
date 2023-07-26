@@ -28,7 +28,7 @@ const persistDb = (model: keyof typeof db) => {
     const data = loadDb();
     // @ts-ignore
     data[model] = db[model].getAll();
-    window.localStorage.setItem('msw-db', JSON.stringify(data));
+    window.localStorage.setItem('quiz-maker-msw-db', JSON.stringify(data));
 };
 
 const populateDb = () => {
@@ -51,7 +51,8 @@ const populateDb = () => {
 
 const initializeDb = () => {
     const localStorageDb = loadDb();
-    const isMockDataEmpty = Object.keys(localStorageDb).length !== Object.keys(db).length;
+    // const isMockDataEmpty = Object.keys(localStorageDb).length !== Object.keys(db).length;
+    const isMockDataEmpty = !Object.keys(localStorageDb).length;
 
     if (isMockDataEmpty) {
         populateDb();

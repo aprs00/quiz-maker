@@ -7,7 +7,7 @@ import QuizEditSkeletonLoader from '../components/QuizEditSkeletonLoader';
 // Api
 import {useQuiz, useUpdateQuiz, useQuestions} from '../api';
 // Types
-import {QuizEditFormType, QuestionAddFormType, QuestionType} from '../types';
+import {QuizEditFormType, QuestionAddFormType, QuestionType, UpdatedQuizType} from '../types';
 // Hooks
 import {useCustomRouter} from '@/hooks';
 import useStyles from '../styles';
@@ -22,10 +22,10 @@ const QuizEdit = () => {
     // we can just pass quiz value through state using react router. (1)
     // if that is not suitable, we can still fetch quiz using useQuiz (2)
 
-    // 1
+    // (1)
     // const [isLoading] = useState(false);
     // const {state: quiz} = useCustomRouter();
-    // 2
+    // (2)
     const {data: quiz, isLoading, error} = useQuiz(Number(id));
 
     const {data: questions} = useQuestions();
@@ -50,16 +50,22 @@ const QuizEdit = () => {
             answer: '',
             question: '',
             id: null,
+            newQuestion: true,
         },
     });
 
     const parsedQuestions = useMemo(
-        () =>
-            [...(questions ?? []), ...(createdQuestions ?? [])].map((question) => ({
+        () => [
+            ...(questions ?? []).map((question) => ({
                 label: question.question,
-                value: question.id?.toString(),
+                value: question.id.toString(),
             })),
-        [questions],
+            ...(createdQuestions ?? []).map((question) => ({
+                label: question.question,
+                value: question.id !== null ? question.id.toString() : '',
+            })),
+        ],
+        [questions, createdQuestions],
     );
 
     const handleAddQuestion = useCallback(() => {
@@ -69,49 +75,41 @@ const QuizEdit = () => {
             question,
             answer,
             id: newId,
+            newQuestion: true,
         };
 
-        // setCreatedQuestions((prev) => [...(prev || []), newQuestion]);
-        // addNewQuestionForm.reset();
-        // quizEditForm.setFieldValue('questions', [...(quizEditForm.values.questions || []), newId.toString()]);
-        console.log(quizEditForm.values);
-    }, [setCreatedQuestions]);
+        setCreatedQuestions((prev) => [...(prev || []), newQuestion]);
+        addNewQuestionForm.reset();
+        quizEditForm.setFieldValue('questions', [...(quizEditForm.values.questions || []), newId.toString()]);
+    }, [setCreatedQuestions, addNewQuestionForm]);
 
     const handleUpdateQuiz = useCallback(
         (values: QuizEditFormType) => {
-            // const parsedQuestionsByIds = values.questions?.map((id) => questions?.find((q) => q.id === Number(id)));
-            // if there is no id, add it to the array also
+            const concatQuestions = [...(questions ?? []), ...(createdQuestions ?? [])];
+
             const parsedQuestionsByIds = values.questions?.map((id) => {
-                // if id is -1, it means that it is a new question
-                if (id === '-1') return {question: values.name};
-
-                // if (id === '-1') return {question: values.name};
-
-                const question = questions?.find((q) => q.id === Number(id));
+                const question = concatQuestions?.find((q) => q.id === Number(id));
                 if (!question) return;
+                // if a question is a new question, we only need question answer
+                if ('newQuestion' in question && question?.newQuestion) {
+                    return {
+                        question: question.question,
+                        answer: question.answer,
+                    };
+                }
+                // if it is an existing question, we also need id
                 return question;
             });
 
-            const json = {
+            const json: UpdatedQuizType = {
                 name: values.name,
                 questions: parsedQuestionsByIds,
             };
 
             updateQuiz(json);
         },
-        [updateQuiz, questions],
+        [updateQuiz, questions, createdQuestions, parsedQuestions],
     );
-
-    // useEffect(() => {
-    //     if (!isLoading && quiz) {
-    //         quizEditForm.setValues({
-    //             name: quiz?.name,
-    //             questions: quiz?.questions.map((question) => question.id.toString()),
-    //         });
-
-    //         console.log(quizEditForm.values);
-    //     }
-    // }, [isLoading, quiz]);
 
     if (isLoading) {
         return <QuizEditSkeletonLoader />;
