@@ -36,6 +36,10 @@ const QuizPlayModal = (props: QuizPlayModalType) => {
 
     const {classes} = useStyles();
 
+    const handleOnSlideChange = (index: number) => {
+        console.log(index);
+    };
+
     const questionSlides = quiz?.questions.map((question, index) => (
         <CarouselSlide question={question} index={index} />
     ));
@@ -55,10 +59,11 @@ const QuizPlayModal = (props: QuizPlayModalType) => {
                     withIndicators={false}
                     height={400}
                     classNames={{
-                        viewport: classes.carouselViewport,
-                        indicators: classes.carouselIndications,
                         container: classes.carouselContainer,
+                        slide: classes.carouselSlide,
+                        control: classes.carouselControl,
                     }}
+                    onSlideChange={handleOnSlideChange}
                 >
                     {questionSlides}
                 </Carousel>

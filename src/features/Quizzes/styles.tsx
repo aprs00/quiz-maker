@@ -1,4 +1,4 @@
-import {createStyles} from '@mantine/core';
+import {createStyles, rem} from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
     value: {
@@ -11,20 +11,21 @@ const useStyles = createStyles((theme) => ({
     },
 
     // Carousel
-    carouselViewport: {
-        marginRight: `calc(${theme.spacing.xl} * 3)`,
-        marginLeft: `calc(${theme.spacing.xl} * 3)`,
-    },
-    carouselIndications: {
-        marginRight: `calc(${theme.spacing.xl} * 3)`,
-        marginLeft: `calc(${theme.spacing.xl} * 3)`,
-    },
     carouselContainer: {
         alignItems: 'center',
     },
     carouselTextRoot: {
         maxHeight: '300px',
         overflow: 'auto',
+    },
+    carouselSlide: {
+        padding: rem(72),
+    },
+    carouselControl: {
+        '&[data-inactive]': {
+            opacity: 0,
+            cursor: 'default',
+        },
     },
 }));
 
