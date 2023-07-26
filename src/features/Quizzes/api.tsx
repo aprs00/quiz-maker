@@ -18,7 +18,12 @@ import {useCustomRouter} from '@/hooks';
 
 // QUESTIONS
 const fetchQuestions = async (): Promise<QuestionsResponseType> => {
-    const data = (await api.get('questions').json()) as QuestionsResponseType;
+    // const data = (await api.get('questions').json()) as QuestionsResponseType;
+    // return data;
+
+    // fetch using fetch
+    const response = await fetch('http://quiz-maker.apidocs.enterwell.space/api/questions');
+    const data = await response.json();
     return data;
 };
 
