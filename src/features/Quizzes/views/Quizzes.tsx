@@ -1,4 +1,4 @@
-import {Suspense, useState} from 'react';
+import {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {Table, Button, Flex, Group} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
@@ -19,7 +19,7 @@ const Quizzes = () => {
     const [deleteQuizModalOpened, {open: deleteQuizModalOpen, close: deleteQuizModalClose}] = useDisclosure(false);
     const [quizPlayModalOpened, {open: quizPlayModalOpen, close: quizPlayModalClose}] = useDisclosure(false);
 
-    const {data: quizzes, isLoading, error} = useQuizzes();
+    const {data: quizzes, isLoading} = useQuizzes();
 
     const handleQuizDeleteBtn = (id: number) => {
         deleteQuizModalOpen();

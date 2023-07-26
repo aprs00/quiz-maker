@@ -80,7 +80,11 @@ const useCreateQuiz = () => {
             });
         },
         onError: (error: ErrorResponseType) => {
-            console.log('useCreateQuiz error', error);
+            notifications.show({
+                title: 'Error',
+                message: error.message,
+                color: 'red',
+            });
         },
     });
 };
@@ -121,7 +125,11 @@ const useDeleteQuiz = (id: number) => {
             });
         },
         onError: (error: ErrorResponseType) => {
-            console.log('useDeleteQuiz error', error);
+            notifications.show({
+                title: 'Error',
+                message: error.message,
+                color: 'red',
+            });
         },
     });
 };
