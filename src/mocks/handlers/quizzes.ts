@@ -9,14 +9,14 @@ import type {MockPayloadQuestion} from '@/features/Quizzes/types';
 export const quizzesHandlers = [
     rest.get(`${API_URL}/quizzes`, (_, __, ctx) => {
         try {
-            const result = db.quiz.findMany({});
+            const result = db.quiz.getAll();
             return delayedResponse(ctx.json(result));
         } catch (error: any) {
             return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));
         }
     }),
 
-    rest.get(`${API_URL}/quizzes/:quizId`, (req, res, ctx) => {
+    rest.get(`${API_URL}/quizzes/:quizId`, (req, __, ctx) => {
         try {
             const {quizId} = req.params;
             const result = db.quiz.findFirst({
@@ -26,6 +26,7 @@ export const quizzesHandlers = [
                     },
                 },
             });
+
             return delayedResponse(ctx.json(result));
         } catch (error: any) {
             return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));
@@ -127,10 +128,11 @@ export const quizzesHandlers = [
                     },
                 },
             });
+
             persistDb('quiz');
+
             return delayedResponse(ctx.json(result));
         } catch (error: any) {
-            console.log(error);
             return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));
         }
     }),

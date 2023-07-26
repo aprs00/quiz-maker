@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, memo, Fragment} from 'react';
 import {Modal, Text, Skeleton, Title, Button, Flex, Group} from '@mantine/core';
 import {Carousel} from '@mantine/carousel';
 
@@ -8,14 +8,14 @@ import type {CarouselSlidePropsType, QuizPlayModalType} from '../types';
 import useStyles from '../styles';
 
 const CarouselSlide = (props: CarouselSlidePropsType) => {
-    const {question, index} = props;
+    const {question} = props;
 
     const [skeletonVisible, setSkeletonVisible] = useState(true);
 
     const {classes} = useStyles();
 
     return (
-        <Carousel.Slide key={`${question.id} ${index} ${crypto.randomUUID()}`}>
+        <Carousel.Slide key={question.id}>
             <Flex direction="column" gap="xl">
                 <Text classNames={{root: classes.carouselTextRoot}}>{question.question}</Text>
                 <Skeleton visible={skeletonVisible}>
@@ -36,40 +36,35 @@ const QuizPlayModal = (props: QuizPlayModalType) => {
 
     const {classes} = useStyles();
 
-    const handleOnSlideChange = (index: number) => {
-        console.log(index);
-    };
-
-    const questionSlides = quiz?.questions.map((question, index) => (
-        <CarouselSlide question={question} index={index} />
+    const questionSlides = quiz?.questions.map((question) => (
+        <Fragment key={question.id}>
+            <CarouselSlide question={question} />
+        </Fragment>
     ));
 
     return (
-        <>
-            <Modal
-                opened={opened}
-                onClose={close}
-                transitionProps={{transition: 'fade', duration: 6100, timingFunction: 'linear'}}
-                size="xl"
+        <Modal
+            opened={opened}
+            onClose={close}
+            transitionProps={{transition: 'fade', duration: 6100, timingFunction: 'linear'}}
+            size="xl"
+        >
+            <Title order={3} ta="center">
+                {quiz?.name}
+            </Title>
+            <Carousel
+                withIndicators
+                height={400}
+                classNames={{
+                    container: classes.carouselContainer,
+                    slide: classes.carouselSlide,
+                    control: classes.carouselControl,
+                }}
             >
-                <Title order={3} ta="center">
-                    {quiz?.name}
-                </Title>
-                <Carousel
-                    withIndicators={false}
-                    height={400}
-                    classNames={{
-                        container: classes.carouselContainer,
-                        slide: classes.carouselSlide,
-                        control: classes.carouselControl,
-                    }}
-                    onSlideChange={handleOnSlideChange}
-                >
-                    {questionSlides}
-                </Carousel>
-            </Modal>
-        </>
+                {questionSlides}
+            </Carousel>
+        </Modal>
     );
 };
 
-export default QuizPlayModal;
+export default memo(QuizPlayModal);

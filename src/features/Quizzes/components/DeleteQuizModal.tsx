@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {Modal, Group, Button, Text} from '@mantine/core';
 
 // Types
@@ -11,28 +12,26 @@ const DeleteQuizModal = (props: DeleteQuizModalPropsType) => {
     const {mutate: deleteQuiz} = useDeleteQuiz(quizToDeleteId || 0);
 
     return (
-        <>
-            <Modal
-                opened={opened}
-                onClose={close}
-                transitionProps={{transition: 'fade', duration: 6100, timingFunction: 'linear'}}
-            >
-                <Text fz="md">Are you sure you want to delete this quiz ?</Text>
-                <Group mt="xl" position="center">
-                    <Button onClick={close}>Cancel</Button>
-                    <Button
-                        color="red"
-                        onClick={() => {
-                            deleteQuiz();
-                            close();
-                        }}
-                    >
-                        Delete
-                    </Button>
-                </Group>
-            </Modal>
-        </>
+        <Modal
+            opened={opened}
+            onClose={close}
+            transitionProps={{transition: 'fade', duration: 6100, timingFunction: 'linear'}}
+        >
+            <Text fz="md">Are you sure you want to delete this quiz ?</Text>
+            <Group mt="xl" position="center">
+                <Button onClick={close}>Cancel</Button>
+                <Button
+                    color="red"
+                    onClick={() => {
+                        deleteQuiz();
+                        close();
+                    }}
+                >
+                    Delete
+                </Button>
+            </Group>
+        </Modal>
     );
 };
 
-export default DeleteQuizModal;
+export default memo(DeleteQuizModal);

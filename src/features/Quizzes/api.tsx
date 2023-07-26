@@ -11,6 +11,7 @@ import type {
     QuestionsResponseType,
     CreateQuizType,
     UpdatedQuizType,
+    ErrorResponseType,
 } from './types';
 // Hooks
 import {useCustomRouter} from '@/hooks';
@@ -78,7 +79,7 @@ const useCreateQuiz = () => {
                 message: 'Quiz created successfully',
             });
         },
-        onError: (error) => {
+        onError: (error: ErrorResponseType) => {
             console.log('useCreateQuiz error', error);
         },
     });
@@ -98,8 +99,12 @@ const useUpdateQuiz = (id: number) => {
                 message: 'Quiz updated successfully',
             });
         },
-        onError: (error) => {
-            console.log('useUpdateQuiz error', error);
+        onError: (error: ErrorResponseType) => {
+            notifications.show({
+                title: 'Error',
+                message: error.message,
+                color: 'red',
+            });
         },
     });
 };
@@ -115,7 +120,7 @@ const useDeleteQuiz = (id: number) => {
                 message: 'Quiz deleted successfully',
             });
         },
-        onError: (error) => {
+        onError: (error: ErrorResponseType) => {
             console.log('useDeleteQuiz error', error);
         },
     });

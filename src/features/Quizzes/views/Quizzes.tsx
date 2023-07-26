@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {Suspense, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {Table, Button, Flex, Group} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';

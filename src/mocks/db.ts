@@ -4,7 +4,7 @@ import {randomNumber} from '@/utils';
 
 import {QuestionType, QuizType} from '@/features/Quizzes/types';
 
-const NUMBER_OF_QUESTIONS = 100;
+const NUMBER_OF_QUESTIONS = 70;
 const NUMBER_OF_QUIZZES = 10;
 
 const models = {
@@ -26,18 +26,19 @@ const loadDb = () => Object.assign(JSON.parse(window.localStorage.getItem('quiz-
 
 const persistDb = (model: keyof typeof db) => {
     const data = loadDb();
-    // @ts-ignore
-    data[model] = db[model].getAll();
+
+    data[model] = db[model as keyof typeof models].getAll();
     window.localStorage.setItem('quiz-maker-msw-db', JSON.stringify(data));
 };
 
 const populateDb = () => {
     // Generating new question data and adding them to the database
     const questions: QuestionType[] = [];
+
     [...new Array(NUMBER_OF_QUESTIONS)].forEach(() => {
         const questionData = questionGenerator();
         const question = db.question.create(questionData);
-        questions.push(question); // Store the question IDs
+        questions.push(question);
     });
 
     // Generating new quiz data and adding them to the database and randomly assigning questions to them
@@ -51,7 +52,6 @@ const populateDb = () => {
 
 const initializeDb = () => {
     const localStorageDb = loadDb();
-    // const isMockDataEmpty = Object.keys(localStorageDb).length !== Object.keys(db).length;
     const isMockDataEmpty = !Object.keys(localStorageDb).length;
 
     if (isMockDataEmpty) {
@@ -65,7 +65,7 @@ const initializeDb = () => {
         localStorageDb.quiz.forEach((data: QuizType) => {
             // Retrieve the question IDs from local storage data
             const questionIds = data.questions.map((question) => question.id);
-            // Retrieve the actual question objects from the generated data
+            // Retrieve the actual question objects from the database
             const quizQuestions = questions.filter((question) => questionIds.includes(question.id));
             // Create the quiz with the corresponding questions
             db.quiz.create({...data, questions: quizQuestions});
@@ -73,10 +73,6 @@ const initializeDb = () => {
     }
 };
 
-const resetDb = () => {
-    window.localStorage.clear();
-};
-
 initializeDb();
 
-export {db, loadDb, persistDb, resetDb};
+export {db, persistDb};

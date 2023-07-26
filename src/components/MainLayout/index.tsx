@@ -7,7 +7,7 @@ import Header from '../Header';
 const MainLayout = () => {
     return (
         <AppShell padding={0} navbarOffsetBreakpoint="sm" asideOffsetBreakpoint="sm" header={<Header />}>
-            <Container mt={42}>
+            <Container mt={42} mb={80}>
                 <Outlet />
             </Container>
         </AppShell>

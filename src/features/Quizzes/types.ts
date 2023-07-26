@@ -6,7 +6,6 @@ export type DeleteQuizModalPropsType = {
 
 export type CarouselSlidePropsType = {
     question: QuestionType;
-    index: number;
 };
 
 export type QuizPlayModalType = {
@@ -64,4 +63,8 @@ export type MockPayloadQuestion = {
     id?: number;
     question: string;
     answer: string;
+};
+
+export type ErrorResponseType = {
+    message: string;
 };

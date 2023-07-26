@@ -7,7 +7,8 @@ import {API_URL} from '@/config/env';
 export const questionsHandlers = [
     rest.get(`${API_URL}/questions`, (_, __, ctx) => {
         try {
-            const result = db.question.findMany({});
+            const result = db.question.getAll();
+
             return delayedResponse(ctx.json(result));
         } catch (error: any) {
             return delayedResponse(ctx.status(400), ctx.json({message: error?.message || 'Server Error'}));

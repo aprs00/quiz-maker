@@ -26,24 +26,26 @@ const QuizEdit = () => {
     // const [isLoading] = useState(false);
     // const {state: quiz} = useCustomRouter();
     // (2)
-    const {data: quiz, isLoading, error} = useQuiz(Number(id));
+    const {data: quiz, isLoading: quizFetchLoading} = useQuiz(Number(id));
 
     const {data: questions} = useQuestions();
-    const {mutate: updateQuiz} = useUpdateQuiz(Number(id) || 0);
+    const {mutate: updateQuiz, isLoading: quizUpdateLoading} = useUpdateQuiz(Number(id) || 0);
 
     const quizEditForm = useForm<QuizEditFormType>({
         initialValues: {
             name: '',
             questions: [],
         },
-    });
 
-    useEffect(() => {
-        quizEditForm.setValues({
-            name: quiz?.name,
-            questions: quiz?.questions.map((question: QuestionType) => question.id.toString()),
-        });
-    }, [quiz, quizEditForm.setValues]);
+        validate: (values) => {
+            const errors: Record<string, string> = {};
+
+            if (!values.name) errors.name = 'Name is required';
+            if (!values.questions) errors.questions = 'Questions are required';
+
+            return errors;
+        },
+    });
 
     const addNewQuestionForm = useForm<QuestionAddFormType>({
         initialValues: {
@@ -52,7 +54,18 @@ const QuizEdit = () => {
             id: null,
             newQuestion: true,
         },
+
+        validate: (values) => {
+            const errors: Record<string, string> = {};
+
+            if (!values.question) errors.question = 'Question is required';
+            if (!values.answer) errors.answer = 'Answer is required';
+
+            return errors;
+        },
     });
+
+    console.log(addNewQuestionForm);
 
     const parsedQuestions = useMemo(
         () => [
@@ -68,20 +81,25 @@ const QuizEdit = () => {
         [questions, createdQuestions],
     );
 
-    const handleAddQuestion = useCallback(() => {
-        const {question, answer} = addNewQuestionForm.values;
-        const newId = crypto.getRandomValues(new Uint32Array(1))[0];
-        const newQuestion = {
-            question,
-            answer,
-            id: newId,
-            newQuestion: true,
-        };
+    const handleAddQuestion = useCallback(
+        (values: QuestionAddFormType) => {
+            const {question, answer} = values;
+            const newId = crypto.getRandomValues(new Uint32Array(1))[0];
+            const newQuestion = {
+                question,
+                answer,
+                id: newId,
+                newQuestion: true,
+            };
 
-        setCreatedQuestions((prev) => [...(prev || []), newQuestion]);
-        addNewQuestionForm.reset();
-        quizEditForm.setFieldValue('questions', [...(quizEditForm.values.questions || []), newId.toString()]);
-    }, [setCreatedQuestions, addNewQuestionForm]);
+            setCreatedQuestions((prev) => [...(prev || []), newQuestion]);
+
+            addNewQuestionForm.reset();
+
+            quizEditForm.setFieldValue('questions', [...(quizEditForm.values.questions || []), newId.toString()]);
+        },
+        [setCreatedQuestions, addNewQuestionForm],
+    );
 
     const handleUpdateQuiz = useCallback(
         (values: QuizEditFormType) => {
@@ -111,65 +129,85 @@ const QuizEdit = () => {
         [updateQuiz, questions, createdQuestions, parsedQuestions],
     );
 
-    if (isLoading) {
+    useEffect(() => {
+        quizEditForm.setValues({
+            name: quiz?.name,
+            questions: quiz?.questions.map((question: QuestionType) => question.id.toString()),
+        });
+    }, [quiz]);
+
+    if (quizFetchLoading) {
         return <QuizEditSkeletonLoader />;
     }
 
     return (
-        <form onSubmit={quizEditForm.onSubmit((values) => handleUpdateQuiz(values))}>
-            <Flex gap="lg" direction="column">
-                <Title>{quiz?.name}</Title>
-                <TextInput
-                    aria-label="Quiz Name"
-                    placeholder="Quiz Name"
-                    label="Quiz Name"
-                    withAsterisk
-                    {...quizEditForm.getInputProps('name')}
-                />
-                <MultiSelect
-                    aria-label="Quiz Questions"
-                    data={parsedQuestions}
-                    label="Quiz Questions"
-                    placeholder="Select Questions"
-                    searchable
-                    classNames={{
-                        value: classes.value,
-                        defaultValueLabel: classes.defaultValueLabel,
-                    }}
-                    {...quizEditForm.getInputProps('questions')}
-                />
+        <>
+            <form onSubmit={quizEditForm.onSubmit((values) => handleUpdateQuiz(values))}>
+                <Flex gap="lg" direction="column" mb="xl">
+                    <Title>{quiz?.name}</Title>
+                    <TextInput
+                        aria-label="Quiz Name"
+                        placeholder="Quiz Name"
+                        label="Quiz Name"
+                        withAsterisk
+                        required
+                        error={quizEditForm.errors}
+                        {...quizEditForm.getInputProps('name')}
+                    />
+                    <MultiSelect
+                        aria-label="Quiz Questions"
+                        data={parsedQuestions}
+                        label="Quiz Questions"
+                        placeholder="Select Questions"
+                        searchable
+                        classNames={{
+                            value: classes.value,
+                            defaultValueLabel: classes.defaultValueLabel,
+                        }}
+                        error={quizEditForm.errors}
+                        {...quizEditForm.getInputProps('questions')}
+                    />
 
-                <Title order={2}>
-                    <Divider my="sm" />
-                    Add new question to select:
-                </Title>
-                <TextInput
-                    aria-label="Question"
-                    placeholder="Question"
-                    label="Question"
-                    withAsterisk
-                    {...addNewQuestionForm.getInputProps('question')}
-                />
-                <TextInput
-                    aria-label="Answer"
-                    placeholder="Answer"
-                    label="Answer"
-                    withAsterisk
-                    {...addNewQuestionForm.getInputProps('answer')}
-                />
-                <Group>
-                    <Button onClick={handleAddQuestion}>Add</Button>
-                </Group>
-                <Divider my="sm" />
+                    <Group position="right">
+                        <Button variant="outline" onClick={goBack}>
+                            Back
+                        </Button>
+                        <Button type="submit" loading={quizUpdateLoading}>
+                            Update
+                        </Button>
+                    </Group>
+                </Flex>
+            </form>
 
-                <Group position="right">
-                    <Button variant="outline" onClick={goBack}>
-                        Back
-                    </Button>
-                    <Button type="submit">Update</Button>
-                </Group>
-            </Flex>
-        </form>
+            <form onSubmit={addNewQuestionForm.onSubmit((values) => handleAddQuestion(values))}>
+                <Flex gap="lg" direction="column">
+                    <Title order={2}>
+                        <Divider my="sm" />
+                        Add new question to Quiz Questions:
+                    </Title>
+                    <TextInput
+                        aria-label="Question"
+                        placeholder="Question"
+                        label="Question"
+                        withAsterisk
+                        error={addNewQuestionForm.errors}
+                        {...addNewQuestionForm.getInputProps('question')}
+                    />
+                    <TextInput
+                        aria-label="Answer"
+                        placeholder="Answer"
+                        label="Answer"
+                        name="answer"
+                        withAsterisk
+                        error={addNewQuestionForm.errors}
+                        {...addNewQuestionForm.getInputProps('answer')}
+                    />
+                    <Group>
+                        <Button type="submit">Add</Button>
+                    </Group>
+                </Flex>
+            </form>
+        </>
     );
 };
 

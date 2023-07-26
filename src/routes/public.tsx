@@ -8,7 +8,7 @@ import QuizzesRoutes from '@/features/Quizzes/routes';
 
 export default [
     {
-        path: '*',
+        path: '/*',
         element: <Navigate to="/quizzes" />,
     },
     {
