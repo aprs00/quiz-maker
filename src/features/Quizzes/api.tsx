@@ -31,7 +31,12 @@ const useQuestions = () => {
 
 // QUIZZES
 const fetchQuizzes = async (): Promise<QuizzesResponseType> => {
-    const data = (await api.get('quizzes').json()) as QuizzesResponseType;
+    // const data = (await api.get('quizzes').json()) as QuizzesResponseType;
+    // return data;
+
+    // fetch quizzes using fetch
+    const response = await fetch('https://swapi.dev/quizzes');
+    const data = await response.json();
     return data;
 };
 

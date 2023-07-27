@@ -29,7 +29,7 @@ const handleQuestionsDb = (questions: MockPayloadQuestion[]): any =>
     });
 
 export const quizzesHandlers = [
-    rest.get(`${API_URL}/quizzes`, (_, __, ctx) => {
+    rest.get(`https://swapi.dev/quizzes`, (_, __, ctx) => {
         try {
             const result = db.quiz.getAll();
 
