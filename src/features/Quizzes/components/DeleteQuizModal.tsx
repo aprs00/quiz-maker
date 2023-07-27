@@ -15,7 +15,7 @@ const DeleteQuizModal = (props: DeleteQuizModalPropsType) => {
         <Modal
             opened={opened}
             onClose={close}
-            transitionProps={{transition: 'fade', duration: 6100, timingFunction: 'linear'}}
+            transitionProps={{transition: 'fade', duration: 100, timingFunction: 'linear'}}
         >
             <Text fz="md">Are you sure you want to delete this quiz ?</Text>
             <Group mt="xl" position="center">
