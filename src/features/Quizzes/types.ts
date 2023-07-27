@@ -1,3 +1,5 @@
+import {UseFormReturnType} from '@mantine/form';
+
 export type DeleteQuizModalPropsType = {
     opened: boolean;
     close: () => void;
@@ -67,4 +69,9 @@ export type MockPayloadQuestion = {
 
 export type ErrorResponseType = {
     message: string;
+};
+
+export type NewQuestionFormPropsType = {
+    form: UseFormReturnType<QuestionAddFormType>;
+    handleAddQuestion: (values: QuestionAddFormType) => void;
 };

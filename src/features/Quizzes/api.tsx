@@ -73,6 +73,7 @@ const useCreateQuiz = () => {
         mutationFn: (json: CreateQuizType) => createQuiz(json),
         onSuccess: () => {
             queryClient.invalidateQueries(['quizzes']);
+            queryClient.invalidateQueries(['questions']);
             goBack();
             notifications.show({
                 title: 'Success',
@@ -97,6 +98,7 @@ const useUpdateQuiz = (id: number) => {
         onSuccess: () => {
             queryClient.invalidateQueries(['quizzes']);
             queryClient.invalidateQueries(['quiz', id]);
+            queryClient.invalidateQueries(['questions']);
             goBack();
             notifications.show({
                 title: 'Success',

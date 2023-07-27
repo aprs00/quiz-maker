@@ -6,6 +6,28 @@ import {delayedResponse} from '../utils';
 import {API_URL} from '@/config/env';
 import type {MockPayloadQuestion} from '@/features/Quizzes/types';
 
+// if questions payload have id, find the question in db and return
+// if questions payload don't have id, create a new question in db and return
+const handleQuestionsDb = (questions: MockPayloadQuestion[]): any =>
+    questions.map((question: MockPayloadQuestion) => {
+        if (!question) return;
+        if (question.id) {
+            return db.question.findFirst({
+                where: {
+                    id: {
+                        equals: question.id,
+                    },
+                },
+            });
+        }
+
+        return db.question.create({
+            question: question.question,
+            answer: question.answer,
+            id: faker.number.int(),
+        });
+    });
+
 export const quizzesHandlers = [
     rest.get(`${API_URL}/quizzes`, (_, __, ctx) => {
         try {
@@ -38,24 +60,7 @@ export const quizzesHandlers = [
         try {
             const data = await req.json();
 
-            const questions = data.questions.map((question: MockPayloadQuestion) => {
-                if (!question) return;
-                if (question.id) {
-                    db.question.findFirst({
-                        where: {
-                            id: {
-                                equals: question.id,
-                            },
-                        },
-                    });
-                }
-
-                return db.question.create({
-                    question: question.question,
-                    answer: question.answer,
-                    id: faker.number.int(),
-                });
-            });
+            const questions = handleQuestionsDb(data.questions);
 
             const result = db.quiz.create({
                 id: faker.number.int(),
@@ -77,28 +82,11 @@ export const quizzesHandlers = [
             const {id} = req.params;
             const data = await req.json();
 
-            const questions = data.questions.map((question: MockPayloadQuestion) => {
-                if (!question) return;
-                if (question.id) {
-                    db.question.findFirst({
-                        where: {
-                            id: {
-                                equals: question.id,
-                            },
-                        },
-                    });
-                }
-
-                return db.question.create({
-                    question: question.question,
-                    answer: question.answer,
-                    id: faker.number.int(),
-                });
-            });
+            const questions = handleQuestionsDb(data.questions);
 
             const updateData = {
                 name: data.name,
-                questions: questions,
+                questions,
             };
 
             const result = db.quiz.update({

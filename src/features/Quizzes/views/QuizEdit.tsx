@@ -1,9 +1,10 @@
 import {useState, useEffect, useMemo, useCallback} from 'react';
-import {Title, TextInput, MultiSelect, Flex, Group, Button, Divider} from '@mantine/core';
+import {Title, TextInput, MultiSelect, Flex, Group, Button} from '@mantine/core';
 import {useForm} from '@mantine/form';
 
 // Components
 import QuizEditSkeletonLoader from '../components/QuizEditSkeletonLoader';
+import NewQuestionForm from '../components/NewQuestionForm';
 // Api
 import {useQuiz, useUpdateQuiz, useQuestions} from '../api';
 // Types
@@ -26,9 +27,10 @@ const QuizEdit = () => {
     // const [isLoading] = useState(false);
     // const {state: quiz} = useCustomRouter();
     // (2)
-    const {data: quiz, isLoading: quizFetchLoading} = useQuiz(Number(id));
+    // const {data: quiz, isLoading: quizFetchLoading, isSuccess} = useQuiz(Number(id));
+    const {data: quiz, isLoading: quizFetchLoading, isSuccess} = useQuiz(Number(id));
 
-    const {data: questions} = useQuestions();
+    const {data: questions, isLoading: questionsFetchLoading} = useQuestions();
     const {mutate: updateQuiz, isLoading: quizUpdateLoading} = useUpdateQuiz(Number(id) || 0);
 
     const quizEditForm = useForm<QuizEditFormType>({
@@ -124,17 +126,18 @@ const QuizEdit = () => {
 
             updateQuiz(json);
         },
-        [updateQuiz, questions, createdQuestions, parsedQuestions],
+        [updateQuiz, questions, createdQuestions],
     );
 
     useEffect(() => {
+        if (!isSuccess) return;
         quizEditForm.setValues({
             name: quiz?.name,
             questions: quiz?.questions.map((question: QuestionType) => question.id.toString()),
         });
     }, [quiz]);
 
-    if (quizFetchLoading) {
+    if (quizFetchLoading || questionsFetchLoading) {
         return <QuizEditSkeletonLoader />;
     }
 
@@ -177,34 +180,7 @@ const QuizEdit = () => {
                 </Flex>
             </form>
 
-            <form onSubmit={addNewQuestionForm.onSubmit((values) => handleAddQuestion(values))}>
-                <Flex gap="lg" direction="column">
-                    <Title order={2}>
-                        <Divider my="sm" />
-                        Add new question to Quiz Questions:
-                    </Title>
-                    <TextInput
-                        aria-label="Question"
-                        placeholder="Question"
-                        label="Question"
-                        withAsterisk
-                        error={addNewQuestionForm.errors}
-                        {...addNewQuestionForm.getInputProps('question')}
-                    />
-                    <TextInput
-                        aria-label="Answer"
-                        placeholder="Answer"
-                        label="Answer"
-                        name="answer"
-                        withAsterisk
-                        error={addNewQuestionForm.errors}
-                        {...addNewQuestionForm.getInputProps('answer')}
-                    />
-                    <Group>
-                        <Button type="submit">Add</Button>
-                    </Group>
-                </Flex>
-            </form>
+            <NewQuestionForm form={addNewQuestionForm} handleAddQuestion={handleAddQuestion} />
         </>
     );
 };

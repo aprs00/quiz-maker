@@ -1,7 +1,9 @@
 import {useState, useMemo, useCallback} from 'react';
-import {Title, TextInput, MultiSelect, Flex, Group, Button, Divider} from '@mantine/core';
+import {Title, TextInput, MultiSelect, Flex, Group, Button} from '@mantine/core';
 import {useForm} from '@mantine/form';
 
+// Components
+import NewQuestionForm from '../components/NewQuestionForm';
 // Api
 import {useCreateQuiz, useQuestions} from '../api';
 // Types
@@ -147,34 +149,8 @@ const QuizCreate = () => {
                     </Group>
                 </Flex>
             </form>
-            <form onSubmit={addNewQuestionForm.onSubmit((values) => handleAddQuestion(values))}>
-                <Flex gap="lg" direction="column">
-                    <Title order={2}>
-                        <Divider my="sm" />
-                        Add new question to Quiz Questions:
-                    </Title>
-                    <TextInput
-                        aria-label="Question"
-                        placeholder="Question"
-                        label="Question"
-                        withAsterisk
-                        error={addNewQuestionForm.errors}
-                        {...addNewQuestionForm.getInputProps('question')}
-                    />
-                    <TextInput
-                        aria-label="Answer"
-                        placeholder="Answer"
-                        label="Answer"
-                        name="answer"
-                        withAsterisk
-                        error={addNewQuestionForm.errors}
-                        {...addNewQuestionForm.getInputProps('answer')}
-                    />
-                    <Group>
-                        <Button type="submit">Add</Button>
-                    </Group>
-                </Flex>
-            </form>
+
+            <NewQuestionForm form={addNewQuestionForm} handleAddQuestion={handleAddQuestion} />
         </>
     );
 };
