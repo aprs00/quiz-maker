@@ -16,11 +16,12 @@ To get started with the Quiz Maker application, follow these steps:
     cd quiz-maker
     ```
 
-3.  **Create .env file in project root**:
+3.  **Create .env file in project root and paste following code**:
 
     ```bash
-    VITE_API_URL=http://quiz-maker.api.enterwell.space
+    VITE_API_URL=https://quiz-maker.api.enterwell.space
     VITE_USE_MOCK_API=true
+    VITE_MSW_DB_UUID=cad3e5da-f69f-40b3-9545-137520e75db7
     ```
 
 4.  **Install Dependencies**:

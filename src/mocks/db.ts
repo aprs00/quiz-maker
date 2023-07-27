@@ -4,6 +4,8 @@ import {randomNumber} from '@/utils';
 
 // Types
 import type {QuestionType, QuizType} from '@/features/Quizzes/types';
+// Envs
+import {MSW_DB_UUID} from '@/config/env';
 
 const NUMBER_OF_QUESTIONS = 70;
 const NUMBER_OF_QUIZZES = 10;
@@ -23,7 +25,7 @@ const models = {
 
 const db = factory(models);
 
-const localStorageDbName = `quiz-maker-msw-db`;
+const localStorageDbName = `quiz-maker-msw-db-dev-${MSW_DB_UUID}`;
 
 const loadDb = () => Object.assign(JSON.parse(window.localStorage.getItem(localStorageDbName) || '{}'));
 
