@@ -14,7 +14,11 @@ async function main() {
             return;
         }
 
-        await worker.start();
+        await worker.start({
+            serviceWorker: {
+                url: 'https://quiz-maker-blue.vercel.app/mockServiceWorker.js',
+            },
+        });
     }
 
     ReactDOM.createRoot(document.getElementById('root')!).render(
