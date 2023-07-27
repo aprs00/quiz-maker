@@ -65,8 +65,6 @@ const QuizEdit = () => {
         },
     });
 
-    console.log(addNewQuestionForm);
-
     const parsedQuestions = useMemo(
         () => [
             ...(questions ?? []).map((question) => ({
@@ -108,7 +106,7 @@ const QuizEdit = () => {
             const parsedQuestionsByIds = values.questions?.map((id) => {
                 const question = concatQuestions?.find((q) => q.id === Number(id));
                 if (!question) return;
-                // if a question is a new question, we only need question answer
+                // if a question is a new question, we only need question and answer
                 if ('newQuestion' in question && question?.newQuestion) {
                     return {
                         question: question.question,

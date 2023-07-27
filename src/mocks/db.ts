@@ -22,7 +22,7 @@ const models = {
 
 const db = factory(models);
 
-const localStorageDbName = `quiz-maker-msw-db-rfge`;
+const localStorageDbName = `quiz-maker-msw-db-dev`;
 
 const loadDb = () => Object.assign(JSON.parse(window.localStorage.getItem(localStorageDbName) || '{}'));
 
