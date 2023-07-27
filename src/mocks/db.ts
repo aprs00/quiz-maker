@@ -22,13 +22,15 @@ const models = {
 
 const db = factory(models);
 
-const loadDb = () => Object.assign(JSON.parse(window.localStorage.getItem('quiz-maker-msw-db') || '{}'));
+const localStorageDbName = `quiz-maker-msw-db-rfge`;
+
+const loadDb = () => Object.assign(JSON.parse(window.localStorage.getItem(localStorageDbName) || '{}'));
 
 const persistDb = (model: keyof typeof db) => {
     const data = loadDb();
 
     data[model] = db[model as keyof typeof models].getAll();
-    window.localStorage.setItem('quiz-maker-msw-db', JSON.stringify(data));
+    window.localStorage.setItem(localStorageDbName, JSON.stringify(data));
 };
 
 const populateDb = () => {

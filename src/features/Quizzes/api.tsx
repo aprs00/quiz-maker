@@ -22,7 +22,7 @@ const fetchQuestions = async (): Promise<QuestionsResponseType> => {
     // return data;
 
     // fetch using fetch
-    const response = await fetch('http://quiz-maker.apidocs.enterwell.space/api/questions');
+    const response = await fetch(`${API_URL}/api/questions`);
     const data = await response.json();
     return data;
 };
