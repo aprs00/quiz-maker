@@ -1,5 +1,7 @@
 # Quiz Maker Repository Setup
 
+### https://quiz-maker-delta.vercel.app/quizzes
+
 ## Getting Started
 
 To get started with the Quiz Maker application, follow these steps:
