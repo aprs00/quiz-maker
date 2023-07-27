@@ -8,10 +8,11 @@ import {worker} from './mocks/browser.ts';
 if (USE_MOCK_API)
     worker.start({
         waitUntilReady: true,
-        // msw is not working with vercel build, fix that
         serviceWorker: {
             url: '/mockServiceWorker.js',
         },
+        // ignore unhandled requests
+        onUnhandledRequest: 'bypass',
     });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
