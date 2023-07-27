@@ -5,6 +5,7 @@ import type {RouteObject} from 'react-router-dom';
 const Quizzes = lazy(() => import('./views/Quizzes'));
 const QuizEdit = lazy(() => import('./views/QuizEdit'));
 const QuizCreate = lazy(() => import('./views/QuizCreate'));
+const QuizPlay = lazy(() => import('./views/QuizPlay'));
 
 const QuizzesRoutes = [
     {
@@ -18,6 +19,10 @@ const QuizzesRoutes = [
     {
         path: '/quizzes/create',
         element: <QuizCreate />,
+    },
+    {
+        path: '/quizzes/:id/play',
+        element: <QuizPlay />,
     },
 ] as RouteObject[];
 

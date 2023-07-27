@@ -6,29 +6,19 @@ import {IconPlayerPlay, IconTrash, IconPencil} from '@tabler/icons-react';
 
 // Components
 import DeleteQuizModal from '../components/DeleteQuizModal';
-import QuizPlayModal from '../components/QuizPlayModal';
 import QuizzesSkeletonLoader from '../components/QuizzesSkeletonLoader';
 // Api
 import {useQuizzes} from '../api';
-// Types
-import type {QuizType} from '../types';
 
 const Quizzes = () => {
     const [quizToDeleteId, setQuizToDeleteId] = useState<number | null>(null);
-    const [quizToPlay, setQuizToPlay] = useState<QuizType | null>(null);
     const [deleteQuizModalOpened, {open: deleteQuizModalOpen, close: deleteQuizModalClose}] = useDisclosure(false);
-    const [quizPlayModalOpened, {open: quizPlayModalOpen, close: quizPlayModalClose}] = useDisclosure(false);
 
     const {data: quizzes, isLoading} = useQuizzes();
 
     const handleQuizDeleteBtn = (id: number) => {
         deleteQuizModalOpen();
         setQuizToDeleteId(id);
-    };
-
-    const handleQuizPlayBtn = (quiz: QuizType) => {
-        quizPlayModalOpen();
-        setQuizToPlay(quiz);
     };
 
     const tHead = (
@@ -44,8 +34,9 @@ const Quizzes = () => {
             <td width={150}>
                 <Flex direction={{base: 'column', sm: 'row'}} gap="xs">
                     <Button
+                        component={Link}
                         color="green"
-                        onClick={() => handleQuizPlayBtn(row)}
+                        to={`/quizzes/${row.id}/play`}
                         leftIcon={<IconPlayerPlay size="1rem" />}
                     >
                         Play
@@ -76,7 +67,6 @@ const Quizzes = () => {
 
     return (
         <>
-            <QuizPlayModal quiz={quizToPlay} close={quizPlayModalClose} opened={quizPlayModalOpened} />
             <DeleteQuizModal
                 opened={deleteQuizModalOpened}
                 quizToDeleteId={quizToDeleteId}

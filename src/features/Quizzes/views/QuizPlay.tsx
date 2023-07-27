@@ -1,10 +1,15 @@
-import {useState, memo, Fragment} from 'react';
-import {Modal, Text, Skeleton, Title, Button, Flex, Group} from '@mantine/core';
+import {useState, Fragment} from 'react';
+import {Text, Skeleton, Title, Button, Flex, Group} from '@mantine/core';
 import {Carousel} from '@mantine/carousel';
 
+// Components
+import QuizPlaySkeletonLoader from '../components/QuizPlaySkeletonLoader';
+// Api
+import {useQuiz} from '../api';
 // Types
-import type {CarouselSlidePropsType, QuizPlayModalType} from '../types';
-// Styles
+import {CarouselSlidePropsType} from '../types';
+// Hooks
+import {useCustomRouter} from '@/hooks';
 import useStyles from '../styles';
 
 const CarouselSlide = (props: CarouselSlidePropsType) => {
@@ -31,10 +36,12 @@ const CarouselSlide = (props: CarouselSlidePropsType) => {
     );
 };
 
-const QuizPlayModal = (props: QuizPlayModalType) => {
-    const {opened, quiz, close} = props;
+const QuizEdit = () => {
+    const {goBack, id} = useCustomRouter();
 
     const {classes} = useStyles();
+
+    const {data: quiz, isLoading: quizFetchLoading} = useQuiz(Number(id));
 
     const questionSlides = quiz?.questions.map((question) => (
         <Fragment key={question.id}>
@@ -42,13 +49,11 @@ const QuizPlayModal = (props: QuizPlayModalType) => {
         </Fragment>
     ));
 
+    if (quizFetchLoading) {
+        return <QuizPlaySkeletonLoader />;
+    }
     return (
-        <Modal
-            opened={opened}
-            onClose={close}
-            transitionProps={{transition: 'fade', duration: 6100, timingFunction: 'linear'}}
-            size="xl"
-        >
+        <>
             <Title order={3} ta="center">
                 {quiz?.name}
             </Title>
@@ -63,8 +68,12 @@ const QuizPlayModal = (props: QuizPlayModalType) => {
             >
                 {questionSlides}
             </Carousel>
-        </Modal>
+
+            <Group position="right" mt="xl">
+                <Button onClick={goBack}>Back</Button>
+            </Group>
+        </>
     );
 };
 
-export default memo(QuizPlayModal);
+export default QuizEdit;
