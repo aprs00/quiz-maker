@@ -40,9 +40,7 @@ To get started with the Quiz Maker application, follow these steps:
 
 ---
 
-## Technologies
-
-Packages used:
+### Packages used:
 
 -   [React](https://react.dev)
 -   [TypeScript](https://www.typescriptlang.org)

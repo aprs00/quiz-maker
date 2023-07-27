@@ -72,7 +72,7 @@ const useCreateQuiz = () => {
         mutationKey: ['createQuiz'],
         mutationFn: (json: CreateQuizType) => createQuiz(json),
         onSuccess: () => {
-            queryClient.invalidateQueries(['quizzes']);
+            queryClient.removeQueries(['quizzes']);
             queryClient.invalidateQueries(['questions']);
             goBack();
             notifications.show({
@@ -96,7 +96,7 @@ const useUpdateQuiz = (id: number) => {
         mutationKey: ['updateQuiz', id],
         mutationFn: (json: UpdatedQuizType) => updateQuiz(id, json),
         onSuccess: () => {
-            queryClient.invalidateQueries(['quizzes']);
+            queryClient.removeQueries(['quizzes']);
             queryClient.invalidateQueries(['quiz', id]);
             queryClient.invalidateQueries(['questions']);
             goBack();
