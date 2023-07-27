@@ -71,7 +71,6 @@ const Quizzes = () => {
                 opened={deleteQuizModalOpened}
                 quizToDeleteId={quizToDeleteId}
                 close={deleteQuizModalClose}
-                quizzes={quizzes}
             />
 
             <Group position="right" mb="xl">

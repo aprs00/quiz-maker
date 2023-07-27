@@ -2,7 +2,8 @@ import {factory, primaryKey, manyOf} from '@mswjs/data';
 import {quizGenerator, questionGenerator} from './data-generator';
 import {randomNumber} from '@/utils';
 
-import {QuestionType, QuizType} from '@/features/Quizzes/types';
+// Types
+import type {QuestionType, QuizType} from '@/features/Quizzes/types';
 
 const NUMBER_OF_QUESTIONS = 70;
 const NUMBER_OF_QUIZZES = 10;
@@ -22,7 +23,7 @@ const models = {
 
 const db = factory(models);
 
-const localStorageDbName = `quiz-maker-msw-db-dev`;
+const localStorageDbName = `quiz-maker-msw-db`;
 
 const loadDb = () => Object.assign(JSON.parse(window.localStorage.getItem(localStorageDbName) || '{}'));
 
