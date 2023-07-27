@@ -25,7 +25,7 @@ const models = {
 
 const db = factory(models);
 
-const localStorageDbName = `quiz-maker-msw-db-dev-${MSW_DB_UUID}`;
+const localStorageDbName = `quiz-maker-msw-db-${MSW_DB_UUID}`;
 
 const loadDb = () => Object.assign(JSON.parse(window.localStorage.getItem(localStorageDbName) || '{}'));
 
